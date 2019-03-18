@@ -1,4 +1,5 @@
 # Output the information required to log into our new instance:
+#
 # 1 - Username (MS remote desktop)
 # 2 - Password (MS remote desktop)
 # 3 - Public IP address

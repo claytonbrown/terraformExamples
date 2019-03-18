@@ -1,6 +1,6 @@
 #
-# Set up a Windows Server ECS instance and install Chrome
-# using a PowerShell script
+# Set up a Windows Server 2016 ECS instance and install 
+# Chrome using a PowerShell script
 #
 # Author: Jeremy Pedersen
 # Date: 2019-03-12
