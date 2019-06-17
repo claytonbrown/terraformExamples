@@ -15,7 +15,7 @@ Network performance is important when choosing a cloud provider. Automated alert
 
 ## How 
 
-From your command line, "cd" into this directory. Then run:
+From your command line, "cd" into the directory hodling this README, and then run:
 
 ```
 terraform init
