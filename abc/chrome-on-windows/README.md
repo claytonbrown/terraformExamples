@@ -57,7 +57,7 @@ Type "yes" at the prompt, then hit enter. That's it! In a few minutes you'll hav
 
 ## Notes and Warnings
 
-**Note: If Chrome fails to install, you may need to change the URL referenced in 'install_chrome.ps1'.**. You can find the Chrome installation bundles [here](https://cloud.google.com/chrome-enterprise/browser/download/#download) on Google's site.
+**Note: If Chrome fails to install, you may need to change the URL referenced in `install_chrome.ps1`.** You can find the Chrome installation bundles [here](https://cloud.google.com/chrome-enterprise/browser/download/#download) on Google's site.
 
 ## Architecture
 
