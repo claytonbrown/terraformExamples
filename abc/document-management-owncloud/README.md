@@ -53,6 +53,30 @@ terraform apply
 
 Say "yes" when prompted to continue with the "apply" operation. That's it! In a few minutes you'll have a working ownCloud document sharing system!
 
+## Notes and Warnings
+
+### Login
+
+You can log into the instance like so:
+
+```
+ssh -i name_of_key.pem root@instance_ip_address
+```
+
+**However**, you may need to restrict the permissions on the .pem file to avoid an angry warning from SSH. You can do that like so:
+
+```
+chmod go-rwx name_of_key.pem
+```
+
+### SSH Key Management
+
+Also, **the SSH key .pem file will not be deleted when you call `terraform destroy`**. You must remove it by hand.
+
+### Waiting Period
+
+You should wait a little while for the script install_ownCloud.sh to complete its work before trying to visit the instance's public IP address. Typically, all setup should be done within 2-3 minutes of terraform reporting successful resource creation.
+
 ## Architecture
 
 The architecture for this system is as follows:

@@ -1,13 +1,13 @@
 #
 # Create a simple system to host ownCloud, an open source
-# private cloud system
+# "private cloud" document management system
 # 
 # This script will create:
 #
 # 1 - A new VPC group
-# 2 - A new vSwitch
-# 3 - An RDS database instance (in this VPC group)
-# 4 - An ECS instance (in this VPC group)
+# 2 - A new VSwitch
+# 3 - An RDS database instance
+# 4 - An ECS instance
 # 5 - An EIP (elastic IP) address
 #
 # A shellscript is then run on the ECS instance to install ownCloud
@@ -22,15 +22,15 @@
 #
 # Recommendations: once you've finished setup, I strongly recommend installing an SSL certificate using
 # LetsEncrypt. You'll need to configure a domain name and point it at the server's public IP address first.
-# SSL setup steps can be found here: https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04
+# The best LetsEncrypt setup guide I have seen is this one from DigitalOcean: https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04
 # 
 # Author: Jeremy Pedersen
-# Date: 2019/03/26
-# License: The Unlicense
+# Creation Date: 2019/03/26
+# Last Update: 2019/06/20
 
 provider "alicloud" {
   access_key = "${var.access_key}"
-  secret_key = "${var.secret_key}"
+  secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
 }
 
@@ -101,6 +101,12 @@ resource "alicloud_security_group_rule" "db_out" {
   cidr_ip           = "${alicloud_instance.tf_examples_doc_ecs.private_ip}"
 }
 
+# SSH key pair for instance login
+resource "alicloud_key_pair" "speed-test-key" {
+  key_name = "${var.ssh_key_name}"
+  key_file = "${var.ssh_key_name}.pem"
+}
+
 # Create an ECS instance, and install and 
 # configure required software
 resource "alicloud_instance" "tf_examples_doc_ecs" {
@@ -113,7 +119,8 @@ resource "alicloud_instance" "tf_examples_doc_ecs" {
   security_groups      = ["${alicloud_security_group.tf_examples_doc_sg.id}"]
   vswitch_id           = "${alicloud_vswitch.tf_examples_doc_vswitch.id}"
 
-  password = "${var.ecs_password}"
+  # SSH Key for instance login
+  key_name = "${var.ssh_key_name}"
 
   # Shellscript to install LAMP stack (minus MySQL) and the ownCloud software
   user_data = "${file("install_ownCloud.sh")}"

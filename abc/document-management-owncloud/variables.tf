@@ -7,19 +7,17 @@
 variable "access_key" {
     # No default, must be provided on command line or via environment variable
     description = "Alibaba Cloud Access Key ID"
-    default = ""
 }
 
-variable "secret_key" {
+variable "access_key_secret" {
     # No default, must be provided on command line or via environment variable
     description = "Alibaba Cloud Secret Key"
-    default = ""
 }
 
 # Password for ECS instance login
-variable "ecs_password" {
+variable "ssh_key_name" {
     description = "ECS Login Password (for root)"
-    default = ""
+    default = "owncloud-ssh-key"
 }
 
 # Settings for owncloud database
@@ -35,7 +33,6 @@ variable "db_username" {
 
 variable "db_password" {
     description = "RDS database password (for database login, needed by ownCloud)"
-    default = ""
 }
 
 # Set default region to Singapore (ap-southeast-1)

@@ -9,9 +9,9 @@ output "ecs_username" {
   value       = "root"
 }
 
-output "ecs_password" {
-  description = "Password for instance login (all instances)"
-  value       = "${var.ecs_password}"
+output "ssh_key_name" {
+  description = "SSH key for instance login (all instances)"
+  value       = "${var.ssh_key_name}"
 }
 
 output "ecs_ip" {

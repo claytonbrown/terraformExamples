@@ -64,4 +64,3 @@ Also, **the SSH key .pem file will not be deleted when you call `terraform destr
 Once `terraform apply` has run successfully, you end up with an architecture that looks like this:
 
 ![Stress and Network Testing Environment](diagrams/ubuntu_speed_test.png)
-
