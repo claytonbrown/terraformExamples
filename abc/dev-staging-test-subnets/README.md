@@ -87,6 +87,10 @@ Once you are satisfied that the security group rules are working, you can destro
 terraform destroy
 ```
 
+## Notes and Warnings
+
+Note: **the SSH key .pem file will not be deleted when you call `terraform destroy`**. You must remove it by hand.
+
 ## Architecture
 
 Once `terraform apply` has run successfully, you end up with an architecture that looks like this:

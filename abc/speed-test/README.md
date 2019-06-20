@@ -1,5 +1,7 @@
 # Stress Test: Performance and Network Testing
 
+Script Last Tested On: 2019-06-20 (YYYY-MM-DD)
+
 ## What
 
 This terraform script sets up a single ECS instance and installs some stress testing and network performance testing tools (iperf, stress).
@@ -27,7 +29,7 @@ And then:
 terraform plan
 ```
 
-Check the output. It should show that a security group, VPC group, vSwitch, and ECS instance be created. Once you have confirmed that all the necessary resources will be created, run:
+Check the output. It should show that a security group, VPC group, VSwitch, and ECS instance be created. Once you have confirmed that all the necessary resources will be created, run:
 
 ```
 terraform apply
@@ -40,6 +42,22 @@ When you are done with your tests, run:
 ```
 terraform destroy
 ```
+
+## Notes and Warnings
+
+You can log into the instance like so:
+
+```
+ssh -i name_of_key.pem root@instance_ip_address
+```
+
+**However**, you may need to restrict the permissions on the .pem file to avoid an angry warning from SSH. You can do that like so:
+
+```
+chmod go-rwx name_of_key.pem
+```
+
+Also, **the SSH key .pem file will not be deleted when you call `terraform destroy`**. You must remove it by hand.
 
 ## Architecture
 
