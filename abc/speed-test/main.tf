@@ -4,7 +4,7 @@
 #
 # Author: Jeremy Pedersen
 # Creation Date: 2019/06/12
-#
+# Last Update: 2019/06/20
 
 # Set up provider
 provider "alicloud" {
@@ -82,8 +82,7 @@ resource "alicloud_instance" "speed-test-ecs" {
   # Script to install stress testing tools
   user_data = "${file("install.sh")}"
 
-  # SSH key for instance login (must exist already - no way to create)
-  # this from within terraform right now)
+  # SSH key for instance login
   key_name = "${alicloud_key_pair.speed-test-key.key_name}"
 
   # Make sure a public IP is assigned, with maximum bandwidth

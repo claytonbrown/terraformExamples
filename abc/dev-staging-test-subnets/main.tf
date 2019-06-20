@@ -11,8 +11,8 @@
 # that allows connections to each of the 3 other groups (prod, staging, dev)
 #
 # Author: Jeremy Pedersen
-# Date: 2019/03/14
-#
+# Creation Date: 2019/03/14
+# Last Updated: 2019/06/20
 
 # Set up provider
 provider "alicloud" {
@@ -58,7 +58,7 @@ resource "alicloud_vswitch" "prod" {
   availability_zone = "${data.alicloud_zones.abc_zones.zones.0.id}"
 }
 
-# Set up an extra vSwitch + subnet for a bastion host
+# Set up an extra VSwitch + subnet for a bastion host
 resource "alicloud_vswitch" "management" {
   name              = "tf_examples_vswitch_management"
   vpc_id            = "${alicloud_vpc.tf_example.id}"
@@ -177,6 +177,42 @@ resource "alicloud_security_group_rule" "internet_to_management" {
   cidr_ip           = "0.0.0.0/0"
 }
 
+# Specific rules to block inbound access to the management host
+# from dev, staging, and prod (needed to override the SSH "allow-all"
+# rule above this one)
+resource "alicloud_security_group_rule" "block_ssh_dev_to_management" {
+  type              = "ingress"
+  ip_protocol       = "tcp"
+  policy            = "drop"
+  port_range        = "22/22"
+  security_group_id = "${alicloud_security_group.management.id}"
+  cidr_ip           = "${var.dev_vswitch_cidr_block}"
+}
+
+resource "alicloud_security_group_rule" "block_ssh_staging_to_management" {
+  type              = "ingress"
+  ip_protocol       = "tcp"
+  policy            = "drop"
+  port_range        = "22/22"
+  security_group_id = "${alicloud_security_group.management.id}"
+  cidr_ip           = "${var.staging_vswitch_cidr_block}"
+}
+
+resource "alicloud_security_group_rule" "block_ssh_prod_to_management" {
+  type              = "ingress"
+  ip_protocol       = "tcp"
+  policy            = "drop"
+  port_range        = "22/22"
+  security_group_id = "${alicloud_security_group.management.id}"
+  cidr_ip           = "${var.prod_vswitch_cidr_block}"
+}
+
+# Set up SSH keypair for instance login
+resource "alicloud_key_pair" "dev-staging-test-ssh-key" {
+  key_name = "${var.ssh_key_name}"
+  key_file = "${var.ssh_key_name}.pem"
+}
+
 # Set up dev, staging, production, and management instances
 
 # Development instance
@@ -190,6 +226,7 @@ resource "alicloud_instance" "tf_example_dev" {
   security_groups      = ["${alicloud_security_group.dev.id}"]
   vswitch_id           = "${alicloud_vswitch.dev.id}"
 
+  # Password for instance login
   password = "${var.password}"
 
   # Make sure no public IP is assigned
@@ -207,6 +244,7 @@ resource "alicloud_instance" "tf_example_staging" {
   security_groups      = ["${alicloud_security_group.staging.id}"]
   vswitch_id           = "${alicloud_vswitch.staging.id}"
 
+  # Password for instance login
   password = "${var.password}"
 
   # Make sure no public IP is assigned
@@ -224,6 +262,7 @@ resource "alicloud_instance" "tf_example_production" {
   security_groups      = ["${alicloud_security_group.prod.id}"]
   vswitch_id           = "${alicloud_vswitch.prod.id}"
 
+  # Password for instance login
   password = "${var.password}"
 
   # Make sure no public IP is assigned
@@ -241,7 +280,8 @@ resource "alicloud_instance" "tf_example_management" {
   security_groups      = ["${alicloud_security_group.management.id}"]
   vswitch_id           = "${alicloud_vswitch.management.id}"
 
-  password = "${var.password}"
+# SSH key for instance login
+  key_name = "${alicloud_key_pair.dev-staging-test-ssh-key.key_name}"
 
   # Make sure a public IP **is** assigned (for SSH access)
   internet_max_bandwidth_out = 10

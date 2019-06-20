@@ -1,51 +1,63 @@
 # Subnets: Development, Staging, and Production
 
+Script Last Tested On: 2019-06-20 (YYYY-MM-DD)
+
 ## What
 
-This terraform script sets up a new VPC group with four subnets (each with its own vSwitch):
+This terraform script sets up a new VPC group with four subnets (each with its own VSwitch):
 
 - management
 - development
 - staging
 - production
 
-The script then launches 4 ECS instances, one in each subnet. The VPC group holding the 4 subnets has 4 different security groups, designed to restrict traffic into and out of each subnet. When the script runs, the ECS in the "management" subnet is bound to the "management" security group, the "development" ECS instance to the "development" security group, and so on.
+The script then launches 4 ECS instances, one in each subnet. The VPC group holding the 4 subnets has 4 different security groups, designed to restrict traffic into and out of each subnet. When the script runs, the ECS in the "management" subnet is bound to the "management" Security Group, the "development" ECS instance to the "development" Security Group, and so on.
 
-For convenience rather than security, each of the 4 instances accepts login by password (as root) not by SSH key. The password for all 4 instances is the same, and is configured in variables.tf (or on the command line using the "-var" flag).
+The management instance uses an SSH key for login, while all other instances use a password (for convenience rather than security, so that you do not need to upload a local SSH key to the management instance before logging in to other instances). The SSH key will be created when `terraform apply` is run, and will appear in the same folder as main.tf. You can log into the management SSH instance using a command like this one:
+
+```
+ssh -i name_of_key.pem root@instance_ip_address
+```
+
+You may need to restrict the permissions on the .pem file to avoid an angry warning from SSH. You can do that like so:
+
+```
+chmod go-rwx name_of_key.pem
+```
 
 ## Why
 
-The script demonstrates how it is possible to configure security group rules to restrict traffic to flow in a certain direction between different subnets.
+The script demonstrates how it is possible to configure Security Group rules to allow TCP connections in *only one direction* between different subnets. For instance, Security Group rules can be configured so that machines in group A can initiate SSH connections to machines in group B, but machines in group B cannot initiate new SSH connections to machines in group A.
 
 The rules in main.tf are configured like this:
 
 management subnet:
 
-- Traffic from the internet **IN** to the management subnet is allowed on port 22 (TCP only)
-- Traffic from the management subnet **OUT** to the development subnet is allowed on any port and protocol
-- Traffic from the management subnet **OUT** to the staging subnet is allowed on any port and protocol
-- Traffic from the management subnet **OUT** to the production subnet is allowed on any port and protocol
+- Traffic from the **internet** **IN** to the **management** subnet is allowed on port 22 (TCP only)
+- Traffic from the **management** subnet **OUT** to the **development** subnet is allowed on any port and protocol
+- Traffic from the **management** subnet **OUT** to the **staging** subnet is allowed on any port and protocol
+- Traffic from the **management** subnet **OUT** to the **production** subnet is allowed on any port and protocol
 
 development subnet:
 
-- Traffic from the management subnet **IN** to the development subnet is allowed on any port and protocol
-- Traffic from the development subnet **OUT** to the staging subnet is allowed on any port and protocol
+- Traffic from the **management** subnet **IN** to the **development** subnet is allowed on any port and protocol
+- Traffic from the **development** subnet **OUT** to the **staging** subnet is allowed on any port and protocol
 
 staging subnet:
 
-- Traffic from the management subnet **IN** to the staging subnet is allowed on any port and protocol
-- Traffic from the development subnet **IN** to the staging subnet is allowed on any port and protocol
-- Traffic from the staging subnet **OUT** to the production subnet is allowed on any port and protocol
+- Traffic from the **management** subnet **IN** to the **staging** subnet is allowed on any port and protocol
+- Traffic from the **development** subnet **IN** to the **staging** subnet is allowed on any port and protocol
+- Traffic from the **staging** subnet **OUT** to the **production** subnet is allowed on any port and protocol
 
 production subnet:
 
-- Traffic from the management subnet **IN** to the production subnet is allowed on any port and protocol
-- Traffic from the staging subnet **IN** to the production subnet is allowed on any port and protocol
+- Traffic from the **management** subnet **IN** to the **production** subnet is allowed on any port and protocol
+- Traffic from the **staging** subnet **IN** to the **production** subnet is allowed on any port and protocol
 
 This results in an architecture where:
 
 - Traffic flow from development -> staging -> production is one-way
-- Management (bastion host) can connect to hosts in any other subnet, but those other subnets cannot initiate an inbound connection to the management subnet (bastion host)
+- Management (bastion host) can connect to hosts in any other subnet, but those other subnets cannot initiate a connection to the management machine (bastion host).
 
 ## How 
 
@@ -61,7 +73,7 @@ And then:
 terraform plan
 ```
 
-Check the output. It should show that a security group, VPC group, vSwitch, and ECS instance will all be created. Then run:
+Check the output. It should show that a security group, VPC group, VSwitch, and ECS instance will all be created. Then run:
 
 ```
 terraform apply

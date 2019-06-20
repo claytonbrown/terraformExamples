@@ -15,8 +15,13 @@ variable "access_key_secret" {
   description = "Your Alibaba Cloud Access Key Secret (AK Secret or Secret Key)"
 }
 
+variable "ssh_key_name" {
+  description = "The name of the SSH key to create for instance login"
+  default = "bastion-host-key"
+}
+
 variable "password" {
-  description = "The password for Windows Remote Desktop access to your instance"
+  description = "Password for login to development, staging, and production instances"
 }
 
 variable "region" {
