@@ -3,4 +3,5 @@
 .terraform
 *.pem
 *.tfvars
-
+**/ansible/group_vars/*
+**/ansible/hosts

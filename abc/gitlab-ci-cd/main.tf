@@ -5,7 +5,7 @@
 #
 # Author: Jeremy Pedersen
 # Creation Date: 2019/06/27
-# Last Update: 2019/06/28
+# Last Update: 2019/07/31
 
 provider "alicloud" {
   access_key = "${var.access_key}"
@@ -13,11 +13,11 @@ provider "alicloud" {
   region     = "${var.region}"
 }
 
-# Get a list of availability zones
+# Get a list of availability zones in our selected region
 data "alicloud_zones" "abc_zones" {}
 
 # Get a list of mid-range instnace types we can use
-# in the selected region and zone
+# in the first zone in this region
 data "alicloud_instance_types" "2c4g" {
   memory_size = 4
   cpu_core_count = 2
@@ -87,7 +87,7 @@ resource "alicloud_security_group_rule" "icmp" {
 }
 
 ###
-# OSS Bucket Config
+# OSS Bucket Config for GitLab backups
 ###
 
 # Generate a random string to ensure a unique bucket name
@@ -99,16 +99,40 @@ resource "random_pet" "bucket-name" {
 resource "alicloud_oss_bucket" "gitlab-oss-bucket" {
   bucket = "${random_pet.bucket-name.id}"
   acl = "private" 
+  force_destroy = "true"
 }
 
 ###
 # SSH Key Config
 ###
 
-# SSH key pair for instance login
-resource "alicloud_key_pair" "speed-test-key" {
+# SSH key pair for GitLab/SonarQube SSH login
+resource "alicloud_key_pair" "cicd-ssh-key" {
   key_name = "${var.ssh_key_name}"
   key_file = "${var.ssh_key_name}.pem"
+}
+
+###
+# RDS Config
+###
+
+# Create new PostgreSQL DB for SonarQube
+resource "alicloud_db_instance" "sonarqube_postgres_db_instance" {
+  engine               = "PostgreSQL"
+  engine_version       = "9.4"
+  instance_type        = "rds.pg.s2.large"
+  instance_storage     = "20"
+  instance_name        = "sonarqube-db-instance"
+  vswitch_id           = "${alicloud_vswitch.cicd-demo-vswitch.id}"
+  security_ips = ["${alicloud_instance.cicd-demo-sonar-ecs.private_ip}"]
+}
+
+resource "alicloud_db_account" "sonarqube_postgres_db_account" {
+  instance_id = "${alicloud_db_instance.sonarqube_postgres_db_instance.id}"
+  name        = "${var.sonarqube_db_username}"
+  password    = "${var.sonarqube_db_password}"
+
+  depends_on = ["alicloud_db_instance.sonarqube_postgres_db_instance"]
 }
 
 ###
@@ -119,7 +143,7 @@ resource "alicloud_key_pair" "speed-test-key" {
 resource "alicloud_instance" "cicd-demo-gitlab-ecs" {
   instance_name = "cicd-demo-gitlab-ecs"
 
-  image_id = "ubuntu_18_04_64_20G_alibase_20190624.vhd"
+  image_id = "${var.alicloud_image_id}"
 
   instance_type        = "${data.alicloud_instance_types.2c4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
@@ -133,11 +157,32 @@ resource "alicloud_instance" "cicd-demo-gitlab-ecs" {
   internet_max_bandwidth_out = 0
 }
 
+# Create GitLab runner instance
+resource "alicloud_instance" "cicd-demo-gitlab-runner-ecs" {
+  instance_name = "cicd-demo-gitlab-runner-ecs"
+
+  image_id = "${var.alicloud_image_id}"
+
+  instance_type        = "${data.alicloud_instance_types.2c4g.instance_types.0.id}"
+  system_disk_category = "cloud_efficiency"
+  security_groups      = ["${alicloud_security_group.cicd-demo-sg.id}"]
+  vswitch_id           = "${alicloud_vswitch.cicd-demo-vswitch.id}"
+
+  # SSH Key for instance login
+  key_name = "${var.ssh_key_name}"
+
+  # Install gitlab runner and docker
+  user_data = "${file("resources/configure_gitlab_runner.sh")}"
+  
+  # Make sure a public IP is assigned (with bandwidth of 10 Mbps, which should be plenty)
+  internet_max_bandwidth_out = 10
+}
+
 resource "alicloud_instance" "cicd-demo-sonar-ecs" {
   instance_name = "cicd-demo-sonar-ecs"
 
-  image_id = "ubuntu_18_04_64_20G_alibase_20190624.vhd"
-
+  image_id = "${var.alicloud_image_id}"
+  
   instance_type        = "${data.alicloud_instance_types.2c4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.cicd-demo-sg.id}"]
@@ -191,7 +236,7 @@ resource "alicloud_dns_record" "sonar-dns" {
   name = "${var.domain}"
   host_record = "sonar"
   type = "A"
-  value = "${alicloud_eip.gitlab-eip.ip_address}"
+  value = "${alicloud_eip.sonar-eip.ip_address}"
 }
 
 ###
@@ -219,6 +264,7 @@ resource "alicloud_dns_record" "directmail-mx" {
   name = "${var.domain}"
   host_record = "${var.dm_mx_host_record}"
   type = "MX"
+  priority = "10" # This field is required for MX records
   value = "${var.dm_mx_record_value}"
 }
 
@@ -234,6 +280,41 @@ resource "alicloud_dns_record" "directmail-cname" {
 # RAM Account Config
 ###
 
-# Create a RAM account (and credentials) for full read/write access to OSS
-# (this will be used by GitLab for configuration backups)
+# Create a new RAM user, assign the AliyunOSSFullAccess role, and generate a new 
+# access key (will be used by GitLab for storing backups)
+resource "alicloud_ram_user" "gitlab-demo-oss-fullaccess-user" {
+  name = "gitlab-demo-oss-fullaccess-user"
+}
+
+resource "alicloud_ram_user_policy_attachment" "gitlab-demo-oss-fullaccess-policy-attachment" {
+  policy_name = "AliyunOSSFullAccess"
+  policy_type = "System"
+  user_name = "${alicloud_ram_user.gitlab-demo-oss-fullaccess-user.name}"
+}
+
+resource "alicloud_ram_access_key" "gitlab-demo-oss-fullaccess-ak" {
+  user_name = "${alicloud_ram_user.gitlab-demo-oss-fullaccess-user.name}"
+  secret_file = "oss-fullaccess.ak"
+}
+
+# Create an additional user which will be used later when we are setting up 
+# the GitLab pipeline (it will be used to deploy the infrastructure for our
+# demo application, so it should have FULL ACCESS)
+#
+# WARNING: This is a FULLY PRIVILEGED ACCESS KEY. Share with caution and DO NOT
+# COMMIT TO VERSION CONTROL
+resource "alicloud_ram_user" "gitlab-demo-fullaccess-user" {
+  name = "gitlab-demo-fullaccess-user"
+}
+
+resource "alicloud_ram_user_policy_attachment" "gitlab-demo-fullaccess-policy-attachment" {
+  policy_name = "AdministratorAccess"
+  policy_type = "System"
+  user_name = "${alicloud_ram_user.gitlab-demo-fullaccess-user.name}"
+}
+
+resource "alicloud_ram_access_key" "gitlab-demo-fullaccess-ak" {
+  user_name = "${alicloud_ram_user.gitlab-demo-fullaccess-user.name}"
+  secret_file = "fullaccess.ak"
+}
 

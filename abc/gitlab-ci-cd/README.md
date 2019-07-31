@@ -1,47 +1,54 @@
-# GitLab Ci/CD
+# GitLab CI/CD
 
 ## What
 
-The scripts here create a CI/CD pipeline based on Alibaba Cloud's comprehensive [DevOps Tutorial](https://alibabacloud-howto.github.io/devops/).
+A GitLab-based CI/CD pipeline based on Alibaba Cloud's comprehensive [DevOps Tutorial](https://alibabacloud-howto.github.io/devops/).
 
 The scripts here create and configure the Alibaba Cloud resources necessary to have a fully functional CI/CD pipeline that deploys a toy "Todolist" application written in Java (backend) and JavaScript (frontend - in React).
 
 The pipeline includes sophisticated features such as:
-- Automatic building and testing of application code using GitLab, Docker, and SonarQube
+- Automatic building and testing of the sample application code using GitLab, Docker, and SonarQube
 - Automatic deployment of dev, pre-prod, and production environments using terraform and packer
-- The toy application is deployed using immutable infrastructure best practices
+- The toy application is deployed using **immutable infrastructure** best practices
 - Automatic warnings of build failures and code quality check failures via email (GitLab + DirectMail)
 
 ## Prerequisites
 
 Some resources must be configured in advance by hand because automatic provisioning is not possible through either terraform or the Alibaba Cloud API. Right now, manual steps include:
-- Purchasing a domain name (**must be less than 28 characters long** due to a limitation in DirectMail)
-- Setting up an initial RAM account and access key for use with terraform
+1.  Purchasing a domain name (which **must be less than 28 characters long** due to a limitation in DirectMail)
+2.  Setting up an initial RAM account and access key for use with terraform
 
 In addition, your local machine must have:
 - Ansible 2.8 or newer
-- Terraform 0.11 (**alicloud provider does not yet support 0.12**)
-- The ability to run bash shellscripts
+- Terraform 0.11 (**as of writing, the alicloud terraform provider does not yet  terraform 0.12**)
+- The ability to run bash shell scripts (tested on macOS 10.14 and Ubuntu 18.x)
+
+Some setup steps must be completed by hand after the scripts here have run, which include:
+
+- Registering a GitLab runner (currently, this can only be done through the Gitlab web interface)
+- Creating a new project in GitLab (again, via the GitLab web interface)
+- Filling in environment variables for the new GitLab project (again, via the GitLab web interface)
+- Pushing the initial demo application to GitLab (done using Git on your local machine)
 
 ## Resources Created
 
-Running the scripts here will create the following resources (you will be charged for these unless your Alibaba Cloud currently has applicable coupons):
+Running the scripts here will create the following resources:
 
 - 1xECS (GitLab host)
 - 1xECS (GitLab runner)
 - 1xECS (SonarQube)
 - 1xRDS (SonarQube PostgreSQL database)
 - 1xOSS (GitLab configuration backups and SSL certificates for the deployed application)
-- 1xDirectMail (GitLab and SonarQube email notifications)
+- 1xDirectMail (**created manually** via the Alibaba Cloud console)
 
-And of course once you deploy the todolist application, you will end up with these additional resources:
+Depending on which version of the sample 'todolist' application you deploy, you will also end up with these additional resources:
 
 3xSLB (todolist application load balancer)
 3xECS (SSL certificate management machines for dev, pre-prod, and production environments)
 6xECS (todolist application servers)
 3xRDS (todolist MySQL database servers)
 
-The numbers here account for the fact that 3 identical environments will be running, one for development, another for pre-production, and finally another for production.
+These numbers assume you have configured development, production, and preproduction environments for the 'todolist' application. **You will be charged for these resources while they are running** so consider tearing down and rebuilding this environment as-needed. At minimum, you could stop the ECS instances when not in use, or make snapshots of their disks and then recreate them later as-needed.
 
 ## Contents of this repository
 
@@ -53,7 +60,7 @@ COMING SOON
 
 ## Why
 
-The concept of "DevOps" is broad and encompasses a lot of different tools and ways of thinking. Cultivating a CI/CD workflow also takes time and involves solving numerous complex issues around application deployment, logging, and debugging. Having a toy environment to play with and serve as a model for future applications can help you better understand which direction you should take in adopting your own "DevOps" practices.
+The concept of "DevOps" is broad and encompasses a lot of different tools and ways of doing things. Cultivating a CI/CD workflow also takes time and involves solving numerous complex issues around application deployment, logging, and debugging. Having a toy environment to play with and serve as a model for future applications can help you better understand which direction you should take in adopting your own *DevOps Best Practices*.
 
 ## How
 
