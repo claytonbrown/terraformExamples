@@ -4,13 +4,14 @@
 #
 # Author: Jeremy Pedersen
 # Creation Date: 2019-03-12
-# Last Updated: 2019-06-20
+# Last Updated: 2019-08-02
 
 # Set up the "aliyun" (Alibaba Cloud) provider
 provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
+  version    = "~> 1.52"
 }
 
 # Determine what availability zones are available in our chosen region
@@ -18,7 +19,7 @@ data "alicloud_zones" "abc_zones" {}
 
 # Find instances types available in the chosen region/availability zone
 # with at least 8 GB of memory
-data "alicloud_instance_types" "8g" {
+data "alicloud_instance_types" "mem8g" {
   memory_size       = 8
   availability_zone = "${data.alicloud_zones.abc_zones.zones.0.id}"
 }
@@ -29,8 +30,8 @@ resource "alicloud_instance" "tf_example" {
 
   image_id = "win2016_64_dtc_1607_en-us_40G_alibase_20181220.vhd"
 
-  instance_type        = "${data.alicloud_instance_types.8g.instance_types.0.id}"
-  system_disk_category = "cloud_efficiency"                                       # cheapest (standard) disk type
+  instance_type        = "${data.alicloud_instance_types.mem8g.instance_types.0.id}"
+  system_disk_category = "cloud_efficiency" # cheapest (standard) disk type
   security_groups      = ["${alicloud_security_group.tf_example.id}"]
 
   vswitch_id = "${alicloud_vswitch.tf_example.id}"
