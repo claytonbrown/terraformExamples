@@ -1,6 +1,8 @@
 # Subnets: Development, Staging, and Production
 
-Script Last Tested On: 2019-06-20 (YYYY-MM-DD)
+Terraform Version: 0.12
+Alibaba Cloud Provider Version: 1.52
+Status: Script working as of 2019-08-02 (YYYY-MM-DD)
 
 ## What
 
@@ -61,25 +63,25 @@ This results in an architecture where:
 
 ## How 
 
-From your command line, "cd" into this directory. Then run:
+From your command line, "cd" into the dev-staging-test-subnets directory, then run:
 
 ```
 terraform init
 ```
 
-And then:
+Followed by:
 
 ```
 terraform plan
 ```
 
-Check the output. It should show that a security group, VPC group, VSwitch, and ECS instance will all be created. Then run:
+Check the output. It should show that a security group, VPC group, VSwitch, and ECS instance will all be created. Finally, run:
 
 ```
 terraform apply
 ```
 
-Say "yes" to the prompt. That's it! In a few minutes you'll have a working "demo" environment. Log into the management ECS and from there you will be able to SSH into the production, development, and staging instances. You can run "ping" to ensure that traffic flow matches the architecture diagram below.  
+Say "yes" at the prompt, and hit enter. That's it! In a few minutes you'll have a working "demo" environment. Log into the management ECS and from there you will be able to SSH into the production, development, and staging instances. You can run "ping" to ensure that traffic flow matches the architecture diagram below.  
 
 Once you are satisfied that the security group rules are working, you can destroy the environment:
 
@@ -89,12 +91,12 @@ terraform destroy
 
 ## Notes and Warnings
 
-Note: **the SSH key .pem file will not be deleted when you call `terraform destroy`**. You must remove it by hand.
+Note: **the SSH key .pem file will not be deleted when you call `terraform destroy`**. You must remove it by hand. If you fail to delete the .pem file and run `terraform apply` again following `terraform destroy`, then terraform may not overwrite the .pem file with the new SSH key data, leaving you unable to log into your new instances!
 
 ## Architecture
 
-Once `terraform apply` has run successfully, you end up with an architecture that looks like this:
+Once `terraform apply` has run successfully, you will end up with an architecture that looks like this:
 
 ![Dev->Staging->Prod Subnet Configuration on Alibaba Cloud](diagrams/dev_staging_prod.png)
 
-Note the direction of the arrows between subnets.
+Note the direction of the arrows between subnets (indicating the direction in which traffic is allowed to flow).

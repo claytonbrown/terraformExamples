@@ -12,20 +12,21 @@
 #
 # Author: Jeremy Pedersen
 # Creation Date: 2019/03/14
-# Last Updated: 2019/06/20
+# Last Updated: 2019/08/02
 
 # Set up provider
 provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
+  version    = "~> 1.52"
 }
 
 # Get a list of availability zones
 data "alicloud_zones" "abc_zones" {}
 
 # Get a list of cheap instance types we can use for our demo
-data "alicloud_instance_types" "4g" {
+data "alicloud_instance_types" "mem4g" {
   memory_size       = 4
   availability_zone = "${data.alicloud_zones.abc_zones.zones.0.id}"
 }
@@ -221,7 +222,7 @@ resource "alicloud_instance" "tf_example_dev" {
 
   image_id = "ubuntu_18_04_64_20G_alibase_20190223.vhd"
 
-  instance_type        = "${data.alicloud_instance_types.4g.instance_types.0.id}"
+  instance_type        = "${data.alicloud_instance_types.mem4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.dev.id}"]
   vswitch_id           = "${alicloud_vswitch.dev.id}"
@@ -239,7 +240,7 @@ resource "alicloud_instance" "tf_example_staging" {
 
   image_id = "ubuntu_18_04_64_20G_alibase_20190223.vhd"
 
-  instance_type        = "${data.alicloud_instance_types.4g.instance_types.0.id}"
+  instance_type        = "${data.alicloud_instance_types.mem4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.staging.id}"]
   vswitch_id           = "${alicloud_vswitch.staging.id}"
@@ -257,7 +258,7 @@ resource "alicloud_instance" "tf_example_production" {
 
   image_id = "ubuntu_18_04_64_20G_alibase_20190223.vhd"
 
-  instance_type        = "${data.alicloud_instance_types.4g.instance_types.0.id}"
+  instance_type        = "${data.alicloud_instance_types.mem4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.prod.id}"]
   vswitch_id           = "${alicloud_vswitch.prod.id}"
@@ -275,7 +276,7 @@ resource "alicloud_instance" "tf_example_management" {
 
   image_id = "ubuntu_18_04_64_20G_alibase_20190223.vhd"
 
-  instance_type        = "${data.alicloud_instance_types.4g.instance_types.0.id}"
+  instance_type        = "${data.alicloud_instance_types.mem4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.management.id}"]
   vswitch_id           = "${alicloud_vswitch.management.id}"
