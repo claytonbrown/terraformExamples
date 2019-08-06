@@ -87,6 +87,9 @@
 - name: start sonarqube /etc/systemd/user/sonarqube.service
   command: systemctl start sonarqube.service
 
+- name: enable sonarqube service to start at boot time
+  command: systemctl enable sonarqube.service
+
 # Configure HTTP reverse proxy
 - name: install software-properties-common
   apt:
