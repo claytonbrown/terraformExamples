@@ -2,7 +2,7 @@
 
 Terraform Version: 0.12
 Alibaba Cloud Provider Version: 1.52
-Status: Script working as of 2019-06-20 (YYYY-MM-DD)
+Status: Script working as of 2019-08-02 (YYYY-MM-DD)
 
 ## What
 

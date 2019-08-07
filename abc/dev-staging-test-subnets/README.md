@@ -99,4 +99,4 @@ Once `terraform apply` has run successfully, you will end up with an architectur
 
 ![Dev->Staging->Prod Subnet Configuration on Alibaba Cloud](diagrams/dev_staging_prod.png)
 
-Note the direction of the arrows between subnets (indicating the direction in which traffic is allowed to flow).
+Note the direction of the arrows between subnets (indicating the direction in which traffic is allowed to flow）.
