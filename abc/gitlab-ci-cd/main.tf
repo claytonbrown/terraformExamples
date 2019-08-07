@@ -5,12 +5,14 @@
 #
 # Author: Jeremy Pedersen
 # Creation Date: 2019/06/27
-# Last Update: 2019/07/31
+# Last Update: 2019/08/04
 
 provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
+  version = "~> 1.53"
+
 }
 
 # Get a list of availability zones in our selected region
@@ -18,7 +20,7 @@ data "alicloud_zones" "abc_zones" {}
 
 # Get a list of mid-range instnace types we can use
 # in the first zone in this region
-data "alicloud_instance_types" "2c4g" {
+data "alicloud_instance_types" "cores2mem4g" {
   memory_size = 4
   cpu_core_count = 2
   availability_zone = "${data.alicloud_zones.abc_zones.zones.0.id}"
@@ -145,7 +147,7 @@ resource "alicloud_instance" "cicd-demo-gitlab-ecs" {
 
   image_id = "${var.alicloud_image_id}"
 
-  instance_type        = "${data.alicloud_instance_types.2c4g.instance_types.0.id}"
+  instance_type        = "${data.alicloud_instance_types.cores2mem4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.cicd-demo-sg.id}"]
   vswitch_id           = "${alicloud_vswitch.cicd-demo-vswitch.id}"
@@ -163,7 +165,7 @@ resource "alicloud_instance" "cicd-demo-gitlab-runner-ecs" {
 
   image_id = "${var.alicloud_image_id}"
 
-  instance_type        = "${data.alicloud_instance_types.2c4g.instance_types.0.id}"
+  instance_type        = "${data.alicloud_instance_types.cores2mem4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.cicd-demo-sg.id}"]
   vswitch_id           = "${alicloud_vswitch.cicd-demo-vswitch.id}"
@@ -183,7 +185,7 @@ resource "alicloud_instance" "cicd-demo-sonar-ecs" {
 
   image_id = "${var.alicloud_image_id}"
   
-  instance_type        = "${data.alicloud_instance_types.2c4g.instance_types.0.id}"
+  instance_type        = "${data.alicloud_instance_types.cores2mem4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.cicd-demo-sg.id}"]
   vswitch_id           = "${alicloud_vswitch.cicd-demo-vswitch.id}"
