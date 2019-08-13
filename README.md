@@ -60,11 +60,27 @@ Further, each example has its own subdirectory. Right now, some of these directo
 
 You should be able to descend into any project directory, like `aws/scalable-wordpress` and then simply run the scripts there like so:
 
-
 ```
 terraform init
 terraform plan
 terraform apply
+```
+
+Which you can follow with a destroy command when you're done playing with the newly created cloud resources:
+
+```terraform destroy```
+
+In some cases, setup and destroy scripts are included, in which case running the scripts consists of:
+
+```
+terraform init
+./setup.sh
+```
+
+Follow later by:
+
+```
+./destroy.sh
 ```
 
 I won't necessarily provide the same set of scripts for each cloud provider, but I will try to do so wherever it's possible. 
@@ -72,4 +88,4 @@ I won't necessarily provide the same set of scripts for each cloud provider, but
 License
 =======
 
-This repository is licensed under "The Unlicense" so feel free to use the content here in any way you like.
+Everything in this repository is licensed under the [MIT License](https://en.wikipedia.org/wiki/MIT_License). Feel free to copy, modify, and reuse. Share the love!
