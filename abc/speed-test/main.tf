@@ -11,6 +11,7 @@ provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
+  version    = "~> 1.52"
 }
 
 # Create a new VPC group
@@ -70,7 +71,7 @@ resource "alicloud_key_pair" "speed-test-key" {
 # Create a new ECS instance
 resource "alicloud_instance" "speed-test-ecs" {
   instance_name = "tf-speed-test-ecs"
-  host_name = "speed-test"
+  host_name     = "speed-test"
 
   image_id = "${var.os_type}"
 

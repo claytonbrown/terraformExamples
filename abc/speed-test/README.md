@@ -1,6 +1,8 @@
 # Stress Test: Performance and Network Testing
 
-Script Last Tested On: 2019-06-20 (YYYY-MM-DD)
+- Terraform Version: 0.12
+- Alibaba Cloud Provider Version: 1.55
+- Status: Script working as of 2019-08-19 (YYYY-MM-DD)
 
 ## What
 
@@ -17,33 +19,27 @@ Network performance is important when choosing a cloud provider. Automated alert
 
 ## How 
 
-From your command line, "cd" into the directory hodling this README, and then run:
+To run terraform and automatically provision the resources defined in main.tf, open a terminal, navigate to the directory holding this README file, and then run:
 
 ```
-terraform init
+./setup.sh
 ```
 
-And then:
+That should automatically execute `terraform apply`. If you are curious about what terraform will do, then before running setup.sh, you can run `terraform plan` like this:
 
 ```
 terraform plan
 ```
 
-Check the output. It should show that a security group, VPC group, VSwitch, and ECS instance be created. Once you have confirmed that all the necessary resources will be created, run:
+When you are done playing with the speed test ECS instance and are ready to delete all the resource created by terraform, run:
 
 ```
-terraform apply
-```
-
-Say "yes" to the prompt. That's it! In a few minutes you'll have a working environment. Log into the instance to start iperf or run the "stress" command. 
-
-When you are done with your tests, run:
-
-```
-terraform destroy
+./destroy.sh
 ```
 
 ## Notes and Warnings
+
+### How To Log In
 
 You can log into the instance like so:
 
@@ -51,16 +47,19 @@ You can log into the instance like so:
 ssh -i name_of_key.pem root@instance_ip_address
 ```
 
-**However**, you may need to restrict the permissions on the .pem file to avoid an angry warning from SSH. You can do that like so:
+### Dealing with SSH Key Permissions
+
+You may need to restrict the permissions on the .pem file to avoid an angry warning from SSH. You can do that like so:
 
 ```
 chmod go-rwx name_of_key.pem
 ```
+### Deleting SSH keys 
 
-Also, **the SSH key .pem file will not be deleted when you call `terraform destroy`**. You must remove it by hand.
+If you choose to execute `terraform destroy` by hand instead of using using `./destroy.sh`, be aware that the SSH key .pem file will **not** be deleted by terraform. This can cause problems if you try to execute `./setup.sh` or `terraform apply` again in the future, as this old .pem file will prevent a new .pem keyfile from being written, which will **cause your login attempts to fail**.
 
 ## Architecture
 
-Once `terraform apply` has run successfully, you end up with an architecture that looks like this:
+Once `./setup.sh` has run successfully, you end up with an architecture that looks like this:
 
 ![Stress and Network Testing Environment](diagrams/ubuntu_speed_test.png)

@@ -49,5 +49,5 @@ variable "vswitch_cidr_block" {
 
 variable "os_type" {
   description = "Operating System disk image to use, defaults to Ubuntu 18.04"
-  default = "ubuntu_18_04_64_20G_alibase_20190223.vhd"
+  default = "ubuntu_18_04_64_20G_alibase_20190624.vhd"
 }
