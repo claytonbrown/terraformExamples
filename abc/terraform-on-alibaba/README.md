@@ -1,4 +1,4 @@
-# Terraform On Alibaba Cloud: A Terraform Example
+# Terraform On Alibaba Cloud: A Simple Example
 
 - Terraform Version: 0.12
 - Alibaba Cloud Provider Version: 1.55
