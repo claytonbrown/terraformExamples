@@ -12,14 +12,14 @@
 #
 # Author: Jeremy Pedersen
 # Creation Date: 2019/03/14
-# Last Updated: 2019/08/02
+# Last Updated: 2019/08/26
 
 # Set up provider
 provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
-  version    = "~> 1.52"
+  version    = "~> 1.55"
 }
 
 # Get a list of availability zones

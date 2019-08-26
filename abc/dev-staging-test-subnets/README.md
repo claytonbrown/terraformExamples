@@ -1,8 +1,8 @@
 # Subnets: Development, Staging, and Production
 
 - Terraform Version: 0.12
-- Alibaba Cloud Provider Version: 1.52
-- Status: Script working as of 2019-08-02 (YYYY-MM-DD)
+- Alibaba Cloud Provider Version: 1.55
+- Status: Script working as of 2019-08-26 (YYYY-MM-DD)
 
 ## What
 
