@@ -11,7 +11,7 @@ provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
-  version    = "~> 1.52"
+  version    = "~> 1.55"
 }
 
 # Determine what availability zones are available in our chosen region

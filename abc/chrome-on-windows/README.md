@@ -1,7 +1,7 @@
 # Chrome On Windows
 
 - Terraform Version: 0.12
-- Alibaba Cloud Provider Version: 1.52
+- Alibaba Cloud Provider Version: 1.55
 - Status: Script working as of 2019-08-02 (YYYY-MM-DD)
 
 ## What
@@ -45,19 +45,20 @@ First, copy `terraform.tfvars.example` to `terraform.tfvars`. Fill in your acces
 terraform init
 ```
 
-Then:
+If you want to confirm the set of resources terraform will create or change, then run `terraform plan`, otherwise, just directly run:
 
 ```
-terraform plan
+./setup.sh
 ```
 
-Check the output. It should show that a Security Group, VPC group, VSwitch, and ECS instance will all be created. Finally, run:
+This will set up a Windows Server ECS instance and automatically install the Chrome browser. When you are done with this ECS instance, run:
 
 ```
-terraform apply
+./destroy.sh
 ```
 
-Type "yes" at the prompt, and hit enter. That's it! In a few minutes you'll have a working Windows Server 2016 desktop, with Chrome preinstalled.
+This will automatically destory the ECS instance and its associated resources (security groups, VPC group, etc...). That's it!
+
 
 ## Notes and Warnings
 
