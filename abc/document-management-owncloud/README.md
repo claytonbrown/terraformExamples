@@ -1,4 +1,8 @@
-# Chrome On Windows
+# ownCloud on Alibaba Cloud
+
+- Terraform Version: 0.12
+- Alibaba Cloud Provider Version: 1.55
+- Status: Script working as of 2019-08-26 (YYYY-MM-DD)
 
 ## What
 
@@ -42,16 +46,14 @@ terraform init
 And then:
 
 ```
-terraform plan
+./setup.sh
 ```
 
-Check the output. Make sure the proposed changes look sane (i.e. ECS, RDS, EIP and associated resources like security groups and VPC are all set to be created). Then run:
+That's it! In a few minutes you'll have a working ownCloud document sharing system! When (or if) you want to delete all the resources created by running `./setup.sh`, simply run:
 
 ```
-terraform apply
+./destroy.sh
 ```
-
-Say "yes" when prompted to continue with the "apply" operation. That's it! In a few minutes you'll have a working ownCloud document sharing system!
 
 ## Notes and Warnings
 
@@ -71,7 +73,7 @@ chmod go-rwx name_of_key.pem
 
 ### SSH Key Management
 
-Also, **the SSH key .pem file will not be deleted when you call `terraform destroy`**. You must remove it by hand.
+Also, **the SSH key .pem file will not be deleted when you call `terraform destroy`**. You must remove it by hand if you choose to call `terraform destroy` yourself instead of using `./destroy.sh`.
 
 ### Waiting Period
 

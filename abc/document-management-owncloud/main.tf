@@ -26,12 +26,13 @@
 # 
 # Author: Jeremy Pedersen
 # Creation Date: 2019/03/26
-# Last Update: 2019/06/20
+# Last Update: 2019/08/26
 
 provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
+  version    = "~> 1.55"
 }
 
 # Get a list of availability zones
@@ -39,7 +40,7 @@ data "alicloud_zones" "abc_zones" {}
 
 # Get a list of mid-range instnace types we can use
 # to deploy ownCloud
-data "alicloud_instance_types" "8g" {
+data "alicloud_instance_types" "mem8g" {
   memory_size       = 8
   availability_zone = "${data.alicloud_zones.abc_zones.zones.0.id}"
 }
@@ -114,7 +115,7 @@ resource "alicloud_instance" "tf_examples_doc_ecs" {
 
   image_id = "ubuntu_18_04_64_20G_alibase_20190223.vhd"
 
-  instance_type        = "${data.alicloud_instance_types.8g.instance_types.0.id}"
+  instance_type        = "${data.alicloud_instance_types.mem8g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.tf_examples_doc_sg.id}"]
   vswitch_id           = "${alicloud_vswitch.tf_examples_doc_vswitch.id}"
