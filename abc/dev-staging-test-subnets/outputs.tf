@@ -57,7 +57,7 @@ output "prod_private_ip" {
   value       = "${alicloud_instance.tf_example_production.private_ip}"
 }
 
-output "management_private_ip" {
+output "bastion_private_ip" {
   description = "Private IP of management instance"
   value       = "${alicloud_instance.tf_example_management.private_ip}"
 }
