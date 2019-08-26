@@ -37,8 +37,8 @@ output "password" {
   value = "${var.password}"
 }
 
-output "management_ip" {
-  description = "Public IP address of our new Windows 2016 instance"
+output "bastion_ip" {
+  description = "Public IP address of our new bastion host"
   value       = "${alicloud_instance.tf_example_management.public_ip}"
 }
 

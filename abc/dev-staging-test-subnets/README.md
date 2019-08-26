@@ -72,26 +72,20 @@ terraform init
 Followed by:
 
 ```
-terraform plan
+./setup.sh
 ```
 
-Check the output. It should show that a security group, VPC group, VSwitch, and ECS instance will all be created. Finally, run:
+This will automatically create the architecture described above (4 ECS instances, as well as supporting network resources and security group rules, will be created automatically). Once this is done you'll be able to SSH into the bastion host, and from there you should be able to log into the development, staging, and production ECS instances. 
+
+Once you are satisfied that the security group rules are working, you can destroy the environment using this command:
 
 ```
-terraform apply
-```
-
-Say "yes" at the prompt, and hit enter. That's it! In a few minutes you'll have a working "demo" environment. Log into the management ECS and from there you will be able to SSH into the production, development, and staging instances. You can run "ping" to ensure that traffic flow matches the architecture diagram below.  
-
-Once you are satisfied that the security group rules are working, you can destroy the environment:
-
-```
-terraform destroy
+./destroy.sh
 ```
 
 ## Notes and Warnings
 
-Note: **the SSH key .pem file will not be deleted when you call `terraform destroy`**. You must remove it by hand. If you fail to delete the .pem file and run `terraform apply` again following `terraform destroy`, then terraform may not overwrite the .pem file with the new SSH key data, leaving you unable to log into your new instances!
+Note: **the SSH key .pem file will not be deleted if you call `terraform destroy` directly instead of using hte `./destroy.sh` script**. In this case, you must remove the .pem file by hand. If you fail to delete the .pem file and run `terraform apply` or `./setup.sh` again following `terraform destroy`, then terraform may not overwrite your old .pem file with the new SSH key data, leaving you unable to log into your new instances!
 
 ## Architecture
 
