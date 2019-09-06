@@ -15,14 +15,14 @@ provider "alicloud" {
 }
 
 # Create a new VPC group
-resource "alicloud_vpc" "speed-test-vpc" {
-  name       = "tf-speed-test-vpc"
+resource "alicloud_vpc" "tf-slack-alarm-vpc" {
+  name       = "tf-slack-alarm-vpc"
   cidr_block = "${var.vpc_cidr_block}"
 }
 
 # Create a new vswitch
-resource "alicloud_vswitch" "speed-test-vswitch" {
-  name              = "tf-speed-test-vswitch"
+resource "alicloud_vswitch" "slack-alarm-vswitch" {
+  name              = "tf-slack-alarm-vswitch"
   vpc_id            = "${alicloud_vpc.speed-test-vpc.id}"
   cidr_block        = "${var.vswitch_cidr_block}"
   availability_zone = "${var.zone}"
