@@ -77,7 +77,7 @@ terraform init
 ./setup.sh
 ```
 
-Follow later by:
+Followed later by:
 
 ```
 ./destroy.sh
