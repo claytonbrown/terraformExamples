@@ -14,23 +14,25 @@ variable "access_key_secret" {
     description = "Alibaba Cloud Secret Key"
 }
 
-# Password for ECS instance login
+# SSH key for ECS instance login
 variable "ssh_key_name" {
     description = "ECS Login Password (for root)"
     default = "owncloud-ssh-key"
 }
 
-# Settings for owncloud database
+# Database name for ownCloud database
 variable "db_name" {
     description = "Database Name (needed by ownCloud)"
     default = "ownclouddb"
 }
 
+# Username for ownCloud database
 variable "db_username" {
     description = "Database Username (needed by ownCloud - this user has ReadWrite access)"
     default = "owncloud"
 }
 
+# Password for ownCloud database
 variable "db_password" {
     description = "RDS database password (for database login, needed by ownCloud)"
 }

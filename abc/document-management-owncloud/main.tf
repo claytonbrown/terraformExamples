@@ -5,7 +5,7 @@
 # This script will create:
 #
 # 1 - A new VPC group
-# 2 - A new VSwitch
+# 2 - A new vSwitch
 # 3 - An RDS database instance
 # 4 - An ECS instance
 # 5 - An EIP (elastic IP) address
@@ -21,18 +21,18 @@
 # database password, and connection string. Once those are input, everything is set up and ready to go!
 #
 # Recommendations: once you've finished setup, I strongly recommend installing an SSL certificate using
-# LetsEncrypt. You'll need to configure a domain name and point it at the server's public IP address first.
-# The best LetsEncrypt setup guide I have seen is this one from DigitalOcean: https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04
+# Let's Encrypt. You'll need to configure a domain name and point it at the server's public IP address first.
+# The best Let's Encrypt setup guide I have seen is this one from DigitalOcean: https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04
 # 
 # Author: Jeremy Pedersen
-# Creation Date: 2019/03/26
-# Last Update: 2019/08/26
+# Creation Date: 2019-03-26
+# Last Update: 2019-10-22
 
 provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
-  version    = "~> 1.55"
+  version    = "~> 1.58"
 }
 
 # Get a list of availability zones
@@ -113,7 +113,7 @@ resource "alicloud_key_pair" "speed-test-key" {
 resource "alicloud_instance" "tf_examples_doc_ecs" {
   instance_name = "tf_examples_doc_ecs"
 
-  image_id = "ubuntu_18_04_64_20G_alibase_20190223.vhd"
+  image_id = "ubuntu_18_04_64_20G_alibase_20190624.vhd"
 
   instance_type        = "${data.alicloud_instance_types.mem8g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"

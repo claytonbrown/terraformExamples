@@ -1,8 +1,8 @@
 # ownCloud on Alibaba Cloud
 
-- Terraform Version: 0.12
-- Alibaba Cloud Provider Version: 1.55
-- Status: Script working as of 2019-08-26 (YYYY-MM-DD)
+- Terraform Version: v0.12.12
+- Alibaba Cloud Provider Version: v1.58.0
+- Status: Script working as of 2019-10-22 (YYYY-MM-DD)
 
 ## What
 
@@ -56,6 +56,10 @@ That's it! In a few minutes you'll have a working ownCloud document sharing syst
 ```
 
 ## Notes and Warnings
+
+### Security
+
+Before using ownCloud in production, **you should absolutely, *DEFINITELY* enable SSL**. You can get an SSL certificate *entirely for free* from the Let's Encrypt project. A full guide to [setting this up on Ubuntu 18.04](https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04) is available on the DigitalOcean website.
 
 ### Login
 

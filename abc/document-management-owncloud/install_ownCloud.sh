@@ -4,8 +4,8 @@ apt-get -y install apache2
 apt-get -y install php 
 apt-get -y install libapache2-mod-php 
 apt-get -y install php-mysql
-curl https://download.owncloud.org/download/repositories/10.0/Ubuntu_18.04/Release.key | apt-key add -
-echo 'deb http://download.owncloud.org/download/repositories/10.0/Ubuntu_18.04/ /' | tee /etc/apt/sources.list.d/owncloud.list
+curl https://download.owncloud.org/download/repositories/production/Ubuntu_18.04/Release.key | apt-key add -
+echo 'deb http://download.owncloud.org/download/repositories/production/Ubuntu_18.04/ /' > /etc/apt/sources.list.d/owncloud.list
 apt-get update
 apt-get -y install php-bz2
 apt-get -y install php-curl 
