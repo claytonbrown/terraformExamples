@@ -19,8 +19,6 @@ The script creates a simple environment that holds a single ECS instance. It cre
 
 The terraform script passes `install.sh` in to the user_data field for the ECS instance, which automatically installs the tools iperf (for generating network traffic) and stress (for generating CPU, disk, and memory loads).
 
-The script then sets up the infrastructure needed to 
-
 ## Why
 
 CloudMonitor can generate its own email alerts and integrates well with [DingTalk](https://www.dingtalk.com), but doesn't have any official integration with 3rd party apps like Slack.

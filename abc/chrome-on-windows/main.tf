@@ -4,14 +4,14 @@
 #
 # Author: Jeremy Pedersen
 # Creation Date: 2019-03-12
-# Last Updated: 2019-08-02
+# Last Updated: 2019-10-22
 
 # Set up the "aliyun" (Alibaba Cloud) provider
 provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
-  version    = "~> 1.55"
+  version    = "~> 1.58"
 }
 
 # Determine what availability zones are available in our chosen region

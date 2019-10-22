@@ -1,8 +1,8 @@
 # Chrome On Windows
 
-- Terraform Version: 0.12
-- Alibaba Cloud Provider Version: 1.55
-- Status: Script working as of 2019-08-02 (YYYY-MM-DD)
+- Terraform Version: v0.12.12
+- Alibaba Cloud Provider Version: v1.58.0
+- Status: Script working as of 2019-10-22 (YYYY-MM-DD)
 
 ## What
 
