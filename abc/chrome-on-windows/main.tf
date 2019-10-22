@@ -28,7 +28,7 @@ data "alicloud_instance_types" "mem8g" {
 resource "alicloud_instance" "tf_example" {
   instance_name = "tf_examples_windows2016"
 
-  image_id = "win2016_64_dtc_1607_en-us_40G_alibase_20181220.vhd"
+  image_id = "win2019_64_dtc_1809_en-us_40G_alibase_20190816.vhd"
 
   instance_type        = "${data.alicloud_instance_types.mem8g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency" # cheapest (standard) disk type
