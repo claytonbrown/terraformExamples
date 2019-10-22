@@ -5,7 +5,7 @@
 # availability zone here. That said, I STRONGLY
 # recommend you supply your access key and secret
 # some other way. Possibilities include:
-# 1) As entries in a .tfvars file (add a line to .gitignore to make sure you don't
+# 1) As entries in a .tfvars file (add a line to your .gitignore to make sure you don't
 #    commit this to version control!!!)
 # 2) Provide them on the command line using terraform's "-var" flag
 # 3) Provide your Access Key and Secret as environment variables
@@ -25,16 +25,6 @@ variable "ssh_key_name" {
 variable "region" {
   description = "The Alibaba Cloud region where you want to launch your instance (ap-southeast-1 = Singapore)"
   default     = "ap-southeast-1"
-}
-
-variable "zone" {
-  description = "The Alibaba Cloud Zone where our ECS instance and vSwitch will be created"
-  default = "ap-southeast-1c"
-}
-
-variable "instance_type" {
-  description = "Instance type, defaults to ecs.g5.large"
-  default = "ecs.g5.large"
 }
 
 variable "vpc_cidr_block" {

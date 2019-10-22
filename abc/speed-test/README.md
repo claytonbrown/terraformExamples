@@ -1,8 +1,8 @@
 # Stress Test: Performance and Network Testing
 
-- Terraform Version: 0.12
-- Alibaba Cloud Provider Version: 1.55
-- Status: Script working as of 2019-08-19 (YYYY-MM-DD)
+- Terraform Version: v0.12.12
+- Alibaba Cloud Provider Version: v1.58.0
+- Status: Script working as of 2019-10-22 (YYYY-MM-DD)
 
 ## What
 
@@ -38,6 +38,10 @@ When you are done playing with the speed test ECS instance and are ready to dele
 ```
 
 ## Notes and Warnings
+
+### Instlall Times
+
+It takes a little while for `apt-get` to finish running and installing `iperf` and `stress`. When you first log in, you may find that one of the commands is missing, or the machine may reject your first few log in attempts if it's still booting up. I recommend waiting for at least a minute after the the `setup.sh` script finishes, before attempting to log in.
 
 ### How To Log In
 

@@ -3,15 +3,24 @@
 # network speed and stress testing
 #
 # Author: Jeremy Pedersen
-# Creation Date: 2019/06/12
-# Last Update: 2019/06/20
+# Creation Date: 2019-06-12
+# Last Update: 2019-10-22
+
+# Get a list of availability zones
+data "alicloud_zones" "abc_zones" {}
+
+# Get a list of cheap instance types we can use for our demo
+data "alicloud_instance_types" "mem4g" {
+  memory_size       = 4
+  availability_zone = "${data.alicloud_zones.abc_zones.zones.0.id}"
+}
 
 # Set up provider
 provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
-  version    = "~> 1.55"
+  version    = "~> 1.58"
 }
 
 # Create a new VPC group
@@ -25,7 +34,7 @@ resource "alicloud_vswitch" "speed-test-vswitch" {
   name              = "tf-speed-test-vswitch"
   vpc_id            = "${alicloud_vpc.speed-test-vpc.id}"
   cidr_block        = "${var.vswitch_cidr_block}"
-  availability_zone = "${var.zone}"
+  availability_zone = "${data.alicloud_zones.abc_zones.zones.0.id}"
 }
 
 # Set up Security Group and associated rules
@@ -75,7 +84,7 @@ resource "alicloud_instance" "speed-test-ecs" {
 
   image_id = "${var.os_type}"
 
-  instance_type        = "${var.instance_type}"
+  instance_type        = "${data.alicloud_instance_types.mem4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.speed-test-sg.id}"]
   vswitch_id           = "${alicloud_vswitch.speed-test-vswitch.id}"
