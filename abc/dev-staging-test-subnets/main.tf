@@ -11,15 +11,15 @@
 # that allows connections to each of the 3 other groups (prod, staging, dev)
 #
 # Author: Jeremy Pedersen
-# Creation Date: 2019/03/14
-# Last Updated: 2019/08/26
+# Creation Date: 2019-03-14
+# Last Updated: 2019-10-22
 
 # Set up provider
 provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
-  version    = "~> 1.55"
+  version    = "~> 1.58"
 }
 
 # Get a list of availability zones
@@ -220,7 +220,7 @@ resource "alicloud_key_pair" "dev-staging-test-ssh-key" {
 resource "alicloud_instance" "tf_example_dev" {
   instance_name = "tf_examples_dev_ecs"
 
-  image_id = "ubuntu_18_04_64_20G_alibase_20190223.vhd"
+  image_id = "ubuntu_18_04_64_20G_alibase_20190624.vhd"
 
   instance_type        = "${data.alicloud_instance_types.mem4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
@@ -238,7 +238,7 @@ resource "alicloud_instance" "tf_example_dev" {
 resource "alicloud_instance" "tf_example_staging" {
   instance_name = "tf_examples_staging_ecs"
 
-  image_id = "ubuntu_18_04_64_20G_alibase_20190223.vhd"
+  image_id = "ubuntu_18_04_64_20G_alibase_20190624.vhd"
 
   instance_type        = "${data.alicloud_instance_types.mem4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
@@ -256,7 +256,7 @@ resource "alicloud_instance" "tf_example_staging" {
 resource "alicloud_instance" "tf_example_production" {
   instance_name = "tf_examples_prod_ecs"
 
-  image_id = "ubuntu_18_04_64_20G_alibase_20190223.vhd"
+  image_id = "ubuntu_18_04_64_20G_alibase_20190624.vhd"
 
   instance_type        = "${data.alicloud_instance_types.mem4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
@@ -274,14 +274,14 @@ resource "alicloud_instance" "tf_example_production" {
 resource "alicloud_instance" "tf_example_management" {
   instance_name = "tf_examples_management_ecs"
 
-  image_id = "ubuntu_18_04_64_20G_alibase_20190223.vhd"
+  image_id = "ubuntu_18_04_64_20G_alibase_20190624.vhd"
 
   instance_type        = "${data.alicloud_instance_types.mem4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.management.id}"]
   vswitch_id           = "${alicloud_vswitch.management.id}"
 
-# SSH key for instance login
+  # SSH key for instance login
   key_name = "${alicloud_key_pair.dev-staging-test-ssh-key.key_name}"
 
   # Make sure a public IP **is** assigned (for SSH access)

@@ -1,12 +1,12 @@
 # Subnets: Development, Staging, and Production
 
-- Terraform Version: 0.12
-- Alibaba Cloud Provider Version: 1.55
-- Status: Script working as of 2019-08-26 (YYYY-MM-DD)
+- Terraform Version: v0.12.12
+- Alibaba Cloud Provider Version: v1.58.0
+- Status: Script working as of 2019-10-22 (YYYY-MM-DD)
 
 ## What
 
-This terraform script sets up a new VPC group with four subnets (each with its own VSwitch):
+This terraform script sets up a new VPC group with four subnets (each with its own vSwitch):
 
 - management
 - development
@@ -31,7 +31,7 @@ chmod go-rwx name_of_key.pem
 
 The script demonstrates how it is possible to configure Security Group rules to allow TCP connections in *only one direction* between different subnets. For instance, Security Group rules can be configured so that machines in group A can initiate SSH connections to machines in group B, but machines in group B cannot initiate new SSH connections to machines in group A.
 
-The rules in main.tf are configured like this:
+The rules in main.tf are configured like so:
 
 management subnet:
 
@@ -75,7 +75,7 @@ Followed by:
 ./setup.sh
 ```
 
-This will automatically create the architecture described above (4 ECS instances, as well as supporting network resources and security group rules, will be created automatically). Once this is done you'll be able to SSH into the bastion host, and from there you should be able to log into the development, staging, and production ECS instances. 
+This will automatically create the architecture described above (4 ECS instances, as well as supporting network resources and security group rules, which will be created automatically). Once this is done you'll be able to SSH into the bastion host, and from there you should be able to log into the development, staging, and production ECS instances. 
 
 Once you are satisfied that the security group rules are working, you can destroy the environment using this command:
 
