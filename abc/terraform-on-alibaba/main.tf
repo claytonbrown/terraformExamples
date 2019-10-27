@@ -1,5 +1,10 @@
-# A simple terraform script that sets up 
-
+# A simple TF script that sets up an Ubuntu 18 instance, installs 
+# apache, and opens port 80.
+#
+# Author: Jeremy Pedersen
+# Creation Date: 2019-09-21
+# Last Updated: 2019-10-27
+#
 provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
