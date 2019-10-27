@@ -4,14 +4,14 @@
 # infrastructure created here
 #
 # Author: Jeremy Pedersen
-# Creation Date: 2019/06/27
-# Last Update: 2019/08/04
+# Creation Date: 2019-06-27
+# Last Update: 2019-10-22
 
 provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
-  version = "~> 1.53"
+  version = "~> 1.58"
 
 }
 
