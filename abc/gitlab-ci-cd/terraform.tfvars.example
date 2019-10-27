@@ -1,3 +1,7 @@
+# Fill in the following values before running setup.sh or terraform plan/apply
+# WARNING: You need to set up DirectMail by hand, then copy paste the relevant
+# DirectMail settings from the DirectMail web console into the variables here
+# starting with "dm_" or "directmail_"
 access_key = "your_access_key"
 access_key_secret = "your_access_key_secret"
 domain = "your_domain.com"
