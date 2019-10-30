@@ -76,4 +76,6 @@ COMING SOON
 
 ## Architecture
 
-COMING SOON
+The full pipeline looks like this:
+
+![DevOps Architecture](diagrams/gitlab-ci-cd.png)
