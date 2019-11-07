@@ -19,13 +19,17 @@
 # so you will need to explicitly include your AK Key and Secret here, or 
 # supply them as command line arguments or environment variables (it's not
 # possible to use terraform.tfvars at this time)
+#
+# WARNING: You need to run "terraform init" any time you make changes to this terraform {} block
 terraform {
   backend "oss" {
-    bucket = "jdp-tfstate-2019" # Name of your OSS bucket
+    bucket = "jdp-tf-state" # Name of your OSS bucket (create this by hand first, via the console)
     key = "terraform.tfstate" # Name of your state file
     region = "ap-southeast-1" # Region which your OSS bucket belongs to
     access_key = "your_access_key"
     secret_key = "your_access_key_secret"
+    tablestore_endpoint = "https://tfstate-table.cn-hangzhou.ots.aliyuncs.com" # TableStore Endpoint (see Alibaba Cloud Console)
+    tablestore_table = "statelock" # Table Name (create this table yourself first, via the console)
   }
 }
 
