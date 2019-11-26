@@ -11,14 +11,6 @@
 # system! In fact I recommend against setting your password, access key, or access key
 # secret in this file...supply them on the command line or as environment variables instead!
 
-variable "access_key" {
-  description = "Your Alibaba Cloud Access Key (AK Key)"
-}
-
-variable "access_key_secret" {
-  description = "Your Alibaba Cloud Access Key Secret (AK Secret or Secret Key)"
-}
-
 variable "password" {
   description = "The password for Windows Remote Desktop access to your instance"
 }

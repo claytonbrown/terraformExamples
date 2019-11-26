@@ -23,12 +23,10 @@
 # WARNING: You need to run "terraform init" any time you make changes to this terraform {} block
 terraform {
   backend "oss" {
-    bucket = "jdp-tf-state" # Name of your OSS bucket (create this by hand first, via the console)
+    bucket = "my-bucket-name" # Name of your OSS bucket (create this by hand first, via the console)
     key = "terraform.tfstate" # Name of your state file
     region = "ap-southeast-1" # Region which your OSS bucket belongs to
-    access_key = "your_access_key"
-    secret_key = "your_access_key_secret"
-    tablestore_endpoint = "https://tfstate-table.cn-hangzhou.ots.aliyuncs.com" # TableStore Endpoint (see Alibaba Cloud Console)
+    tablestore_endpoint = "https://tfstate-table.ap-southeast-1.ots.aliyuncs.com" # TableStore Endpoint (see Alibaba Cloud Console)
     tablestore_table = "statelock" # Table Name (create this table yourself first, via the console)
   }
 }
@@ -38,7 +36,7 @@ provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
-  version    = "~> 1.55"
+  version    = "~> 1.60"
 }
 
 # Determine what availability zones are available in our chosen region

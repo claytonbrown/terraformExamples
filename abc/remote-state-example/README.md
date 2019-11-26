@@ -1,73 +1,65 @@
-# Chrome On Windows
+# Remote State Example
 
 - Terraform Version: 0.12
-- Alibaba Cloud Provider Version: 1.55
-- Status: Script working as of 2019-08-02 (YYYY-MM-DD)
+- Alibaba Cloud Provider Version: 1.60
+- Status: Script working as of 2019-11-27 (YYYY-MM-DD)
 
 ## What
 
-This terraform script sets up a Windows Server 2016 instance and automatically installs the Chrome browser using a PowerShell script borrowed from [here](https://medium.com/@uqualio/how-to-install-chrome-on-windows-with-powershell-290e7346271). 
-
-Once the script has run, it outputs login information, so that you can log into the newly created ECS instance using an RDP client.
-
-Directory contents:
-
-```
-.
-├── README.md
-├── diagrams
-│   ├── chrome_on_windows.png
-│   └── chrome_on_windows.xml
-├── install_chrome.ps1
-├── main.tf
-├── outputs.tf
-├── terraform.tfvars.example
-└── variables.tf
-```
-
-The readme and diagrams (done using [draw.io](https://about.draw.io/)) are here for explanatory purposes. The files you probably care about are:
-
-- main.tf (creates a VPC group, VSwitch, Security Group, and an ECS instance)
-- variables.tf (variables used in main.tf)
-- outputs.tf (outputs the public IP, username, and password of the ECS instance, for RDP access)
-- install_chrome.ps1 (PowerShell script to fetch and install Chrome)
-- terraform.tfvars.example (an example terraform.tfvars file)
+This terraform script demonstrates how to use the [OSS Backend](https://www.terraform.io/docs/backends/types/oss.html). In Terraform, *backends* allow you to store your terraform *state* (.tfstate files) somewhere other than the local directory that holds your terraform code.
 
 ## Why
 
-Sometimes, you just need a remote desktop session somewhere else. Maybe for testing connectivity or load times for a website or application. Why install Chrome? Because Internet Explorer on Windows Server 2016 is a pain to use!
+Using the OSS Backend to store state remotely is very useful if your code is updated and run by multiple people, or if you want to be sure that the current state of your infrastructure is preserved somewhere safe, away from any local copy of your Terraform code you might have cheked out from a repository like GitHub.
 
 ## How
 
-First, copy `terraform.tfvars.example` to `terraform.tfvars`. Fill in your access key, access key secret, and a password for the Windows 2016 instance the terraform script will create for us. Then, open a terminal and "cd" into the chrome-on-windows directory, and run:
+Before doing anything else, you'll need to create an OSS bucket and a TableStore instance in the region you'd like to store your terraform state in (typically the same region where you will deploy your infrastructure). 
+
+Also, in order to avoid hard-coding an Acess Key and Access Key Secret into your main.tf file, you should export the following environment variables:
+
+```
+$ export ALICLOUD_ACCESS_KEY="my_access_key"
+$ export ALICLOUD_SECRET_KEY="my_access_key_secret"
+```
+
+**Q: Why do I need to do this?** 
+A: In most parts of terraform, you can supply a value like a region name or Access Key using a regular terraform variable in the form `${var.varname}`. The `terraform{}` block used to configure the OSS backend does not support this. Your options are either to hard-code your access key information into the `terraform{}` block (a Really Bad Idea™), or supply the Acess Key and Access Key Secret as environment variables (a Much Better Idea™).
+
+Look for the following code at the top of `main.tf` and fill in the correct region, OSS Bucket, and Table Store information:
+
+```
+terraform {
+  backend "oss" {
+    bucket = "my-bucket-name" # Name of your OSS bucket (create this by hand first, via the console)
+    key = "terraform.tfstate" # Name of your state file
+    region = "ap-southeast-1" # Region which your OSS bucket belongs to
+    tablestore_endpoint = "https://tfstate-table.ap-southeast-1.ots.aliyuncs.com" # TableStore Endpoint (see Alibaba Cloud Console)
+    tablestore_table = "statelock" # Table Name (create this table yourself first, via the console)
+  }
+}
+```
+
+Once you've done that, go ahead and run:
 
 ```
 terraform init
 ```
 
-If you want to confirm the set of resources terraform will create or change, then run `terraform plan`, otherwise, just directly run:
+You can then run the terraform itself by calling the setup script:
 
 ```
 ./setup.sh
 ```
 
-This will set up a Windows Server ECS instance and automatically install the Chrome browser. When you are done with this ECS instance, run:
+And destroy the resulting environment (a Windows instance, VPC group, vSwitch, and Security Group), like so:
 
 ```
 ./destroy.sh
 ```
 
-This will automatically destory the ECS instance and its associated resources (security groups, VPC group, etc...). That's it!
-
-
-## Notes and Warnings
-
-**Note: If Chrome fails to install, you may need to change the URL referenced in `install_chrome.ps1`.** You can find the Chrome installation bundles [here](https://cloud.google.com/chrome-enterprise/browser/download/#download) on Google's site.
-
 ## Architecture
 
-The architecture for this system is as follows:
+The script sets up a single VPC group with a single vSwitch and Security Group, then creates a Windows 2016 instance and installs the Chrome browser on it by running a PowerShell script (`install_chrome.ps1`). The architecture is as below:
 
 ![Windows Server 2016 on Alibaba Cloud](diagrams/chrome_on_windows.png)
-
-The architecture is very simple. Only a single ECS instance, VSwitch, Security Group, and VPC group are created. The idea is to keep things as simple as possible here!
