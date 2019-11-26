@@ -19,8 +19,8 @@ Before doing anything else, you'll need to create an OSS bucket and a TableStore
 Also, in order to avoid hard-coding an Acess Key and Access Key Secret into your main.tf file, you should export the following environment variables:
 
 ```
-$ export ALICLOUD_ACCESS_KEY="my_access_key"
-$ export ALICLOUD_SECRET_KEY="my_access_key_secret"
+export ALICLOUD_ACCESS_KEY="my_access_key"
+export ALICLOUD_SECRET_KEY="my_access_key_secret"
 ```
 
 **Q: Why do I need to do this?** 
