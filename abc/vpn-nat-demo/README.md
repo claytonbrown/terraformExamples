@@ -42,4 +42,4 @@ If you choose to execute `terraform destroy` by hand instead of using using `./d
 
 Once `./setup.sh` has run successfully, you end up with an architecture that looks like this:
 
-![Simple VPN Gateway and NAT Gateway configuration](diagrams/vpn-nat-demo.png)
+![Simple VPN and NAT Gateway configuration](diagrams/vpn-nat-gateway.png)
