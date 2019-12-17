@@ -6,13 +6,13 @@
 
 ## What
 
-This script sets up a VPN Gateway and NAT Gateway attached to a VPC group, then creates a single ECS instances inside the VPC.
+This script demonstrates how to automatically create a custom [RAM Policy]() and bind it to an ECS instance.
 
-The ECS instance only has a private IP address, so it has no access to the internet on its own. The machine can make outbound connections via NAT Gateway (say, for software updates) and you can make inbound connections via SSL over the VPN Gateway (once you have configured an SSL VPN client on your local machine).
+This is the "best practice" for accessing other cloud services from ECS: wherever possible, you should avoid storing Access Keys and Secrets on your ECS instances. 
 
 ## Why
 
-Network setup on the cloud is something new users struggle with. This script is a reference new users can consult to learn the relationship between VPC groups, VPN and NAT Gateways, and associated bindings and configurations (SNAT rules, Elastic IPs, and so on).
+Writing customer RAM Policy can be challenging. This example can get you up to speed quickly, so you have a better understanding of how RAM Policy works, and can incorporate it into your own Terraform code.
 
 ## How 
 
@@ -28,7 +28,7 @@ That should automatically execute `terraform apply`. If you are curious about wh
 terraform plan
 ```
 
-When you are done playing and are ready to delete all the resource created by terraform, run:
+When you are done playing aand are ready to delete all the resource created by terraform, run:
 
 ```
 ./destroy.sh
@@ -42,4 +42,4 @@ If you choose to execute `terraform destroy` by hand instead of using using `./d
 
 Once `./setup.sh` has run successfully, you end up with an architecture that looks like this:
 
-![Simple VPN and NAT Gateway configuration](diagrams/vpn_nat_demo.png)
+![RAM Policy Example](diagrams/ram_example.png)

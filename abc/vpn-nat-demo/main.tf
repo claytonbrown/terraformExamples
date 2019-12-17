@@ -144,3 +144,19 @@ resource "alicloud_instance" "vpn-nat-example-ecs" {
 
   internet_max_bandwidth_out = 0 # Make sure instance is NOT granted a public IP
 }
+
+
+resource "alicloud_instance" "vpn-nat-example-ecs-public-ip" {
+  instance_name = "vpn-nat-example-ecs"
+
+  image_id = "${var.abc_image_id}"
+
+  instance_type        = "${data.alicloud_instance_types.cores2mem4g.instance_types.0.id}"
+  system_disk_category = "cloud_efficiency"
+  security_groups      = ["${alicloud_security_group.vpn-nat-example-sg.id}"]
+  vswitch_id           = "${alicloud_vswitch.vpn-nat-example-vswitch.id}"
+
+  key_name = "${alicloud_key_pair.vpn-nat-example-ssh-key.key_name}"
+
+  internet_max_bandwidth_out = 10 # Make sure instance is NOT granted a public IP
+}
