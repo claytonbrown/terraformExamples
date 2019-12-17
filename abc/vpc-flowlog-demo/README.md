@@ -1,6 +1,6 @@
-# Terraform On Alibaba Cloud: A Simple Example
+# VPC FlowLogs On Alibaba Cloud
 
-**WARNING: DO NOT USE THIS SCRIPT, IT IS NOT YET WORKING AS INTENDED**
+**WARNING: DO NOT USE THIS SCRIPT, IT IS A WORK IN PROGRESS**
 
 - Terraform Version: v0.12.6
 - Alibaba Cloud Provider Version: v1.63
@@ -30,7 +30,7 @@ That should automatically execute `terraform apply`. If you are curious about wh
 terraform plan
 ```
 
-When you are done playing with the speed test ECS instance and are ready to delete all the resource created by terraform, run:
+When you are done playing and are ready to delete all the resource created by terraform, run:
 
 ```
 ./destroy.sh
