@@ -5,7 +5,7 @@
 #
 # Author: Jeremy Pedersen
 # Creation Date: 2019-12-11
-# Last Updated: 2019-12-17
+# Last Updated: 2019-12-18
 #
 provider "alicloud" {
   access_key = "${var.access_key}"
@@ -85,33 +85,31 @@ resource "alicloud_instance" "ram-example-ecs" {
   internet_max_bandwidth_out = 10 # Make sure instance is NOT granted a public IP
 }
 
-# Create RAM Role to attach to the ECS instance, granting permission to use the 
-# ECS API (for instance, to call aliyun ecs DescribeImages from the commandline)
-resource "alicloud_ram_role" "ecs-oss-fullaccess-role" {
-  name     = "ecs-oss-fullaccess-role"
-  document = <<EOF
-  {
-    "Statement": [
-      {
-        "Action": "sts:AssumeRole",
-        "Effect": "Allow",
-        "Principal": {
-          "Service": [
-            "oss.aliyuncs.com", 
-            "ecs.aliyuncs.com"
-          ]
-        }
-      }
-    ],
-    "Version": "1"
-  }
-  EOF
-  description = "Role to grant full access to ECS and OSS services"
+# Create ECS RAM Role
+resource "alicloud_ram_role" "oss-fullaccess-role" {
+  name     = "oss-fullaccess-role"
+  document = "${file("policy/oss_fullaccess_role.json")}"
+  description = "Role to grant full access to OSS"
   force = true
 }
 
-# Attach role to instance
+# Create RAM Policy allowing full access to OSS
+resource "alicloud_ram_policy" "oss-fullaccess-policy" {
+  name = "oss-fullaccess-policy"
+  document = "${file("policy/oss_fullaccess_policy.json")}"
+  description = "RAM Policy for full access to OSS"
+  force = true
+}
+
+# Attach RAM Policy to RAM Role
+resource "alicloud_ram_role_policy_attachment" "oss-fullaccess-policy-attachment" {
+  policy_name = "${alicloud_ram_policy.oss-fullaccess-policy.name}"
+  policy_type = "${alicloud_ram_policy.oss-fullaccess-policy.type}"
+  role_name = "${alicloud_ram_role.oss-fullaccess-role.name}"
+}
+
+# Attach RAM Role to ECS Instance
 resource "alicloud_ram_role_attachment" "attach" {
-  role_name = "${alicloud_ram_role.ecs-oss-fullaccess-role.name}"
+  role_name = "${alicloud_ram_role.oss-fullaccess-role.name}"
   instance_ids = ["${alicloud_instance.ram-example-ecs.id}"]
 }
