@@ -1,12 +1,12 @@
-# VPN Gateway and NAT Gateway Setup: A Demo 
+# RAM Custom Policy Demo 
 
 - Terraform Version: v0.12.6
 - Alibaba Cloud Provider Version: v1.63
-- Status: Script working as of 2019-12-17 (YYYY-MM-DD)
+- Status: Script working as of 2019-12-18 (YYYY-MM-DD)
 
 ## What
 
-This script demonstrates how to automatically create a custom [RAM Policy]() and bind it to an ECS instance.
+This script demonstrates how to automatically create a custom [RAM Policy](https://www.alibabacloud.com/help/doc-detail/100680.htm) and bind it to an ECS instance.
 
 This is the "best practice" for accessing other cloud services from ECS: wherever possible, you should avoid storing Access Keys and Secrets on your ECS instances. 
 
