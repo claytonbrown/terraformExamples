@@ -23,11 +23,11 @@
 # WARNING: You need to run "terraform init" any time you make changes to this terraform {} block
 terraform {
   backend "oss" {
-    bucket = "jdp-tfstate-2019" # Name of your OSS bucket (create this by hand first, via the console)
+    bucket = "jdp-tfstate-ef-test" # Name of your OSS bucket (create this by hand first, via the console)
     key = "terraform.tfstate" # Name of your state file
     region = "ap-southeast-1" # Region which your OSS bucket belongs to
-    tablestore_endpoint = "https://tfstate-instance.ap-southeast-1.ots.aliyuncs.com" # TableStore Endpoint (see Alibaba Cloud Console)
-    tablestore_table = "statelock" # Table Name (create this table yourself first, via the console)
+    #tablestore_endpoint = "https://tfstate-instance.ap-southeast-1.ots.aliyuncs.com" # TableStore Endpoint (see Alibaba Cloud Console)
+    #tablestore_table = "statelock" # Table Name (create this table yourself first, via the console)
   }
 }
 

@@ -17,3 +17,8 @@ output "ip" {
   description = "Public IP address of our new Windows 2016 instance"
   value       = "${alicloud_instance.tf_example.public_ip}"
 }
+
+output "vpc_name" {
+  description = "Name of VPC group created by main.tf"
+  value = "${alicloud_vpc.tf_example.name}"
+}

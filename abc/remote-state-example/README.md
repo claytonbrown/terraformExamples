@@ -1,8 +1,8 @@
 # Remote State Example
 
 - Terraform Version: 0.12
-- Alibaba Cloud Provider Version: 1.60
-- Status: Script working as of 2019-11-27 (YYYY-MM-DD)
+- Alibaba Cloud Provider Version: 1.63
+- Status: Script working as of 2019-12-27 (YYYY-MM-DD)
 
 ## What
 
@@ -57,6 +57,12 @@ And destroy the resulting environment (a Windows instance, VPC group, vSwitch, a
 ```
 ./destroy.sh
 ```
+
+## Other Stuff To Try
+
+You'll see there's a subdirectory in this repo called `remote-state-data-source`. It contains its own `main.tf`, `variables.tf`, `outputs.tf`, and `terraform.tfvars`. You can safely ignore this code unless you are interested in playing around with Terraform's ["remote state" data source](https://www.terraform.io/docs/providers/terraform/d/remote_state.html). The code demonstrates how you can pull data from an existing remote state file into a new terraform script. You can run `terraform init`, `terraform plan`, and `terraform apply` on this code, as it has its own standalone `main.tf` file. It doesn't actually modify the terraform state or create any new resources: instead it simply produces a single output: information about the VPC group created by the root main.tf file, `remote-state-example/main.tf`. 
+
+For an example of how to use the remote-state data source when using the `oss` backend (Alibaba Cloud's remote state backend), see [this page](https://www.terraform.io/docs/backends/types/oss.html). 
 
 ## Architecture
 
