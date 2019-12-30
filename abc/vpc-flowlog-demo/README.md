@@ -4,6 +4,8 @@
 - Alibaba Cloud Provider Version: v1.67
 - Status: Script working as of 2019-12-30 (YYYY-MM-DD)
 
+See this script in action [here, on YouTube](https://www.youtube.com/watch?v=x16Z7WsRUrg&feature=youtu.be).
+
 ## What
 
 This script creates a test environment used to showcase a new feature of Alibaba Cloud VPC groups: the *VPC FlowLog*. FlowLogs allow you to capture network traffic traversing the ENIs (Elastic Network Interfaces) attached to your ECS instance.
