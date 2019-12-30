@@ -4,6 +4,8 @@
 - Alibaba Cloud Provider Version: v1.58.0
 - Status: Script working as of 2019-10-22 (YYYY-MM-DD)
 
+See this script in action [on YouTube](https://www.youtube.com/watch?v=AFv4mBDiM1g&feature=youtu.be)!
+
 ## What
 
 This terraform script sets up a single ECS instance and installs some stress testing and network performance testing tools (iperf, stress).
