@@ -10,8 +10,8 @@ output "user_login" {
 }
 
 # ECS instance private IP address
-output "ecs_private_ip" {
-    description = "ECS instance private IP"
-    value = "${alicloud_instance.flowlog-example-ecs.private_ip}"
+output "ecs_public_ip" {
+    description = "ECS instance public IP"
+    value = "${alicloud_instance.flowlog-example-ecs.public_ip}"
 }
 

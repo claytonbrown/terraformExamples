@@ -1,9 +1,7 @@
 # VPC FlowLogs On Alibaba Cloud
 
-**WARNING: DO NOT USE THIS SCRIPT, IT IS A WORK IN PROGRESS**
-
 - Terraform Version: v0.12.6
-- Alibaba Cloud Provider Version: v1.63
+- Alibaba Cloud Provider Version: v1.67
 - Status: Script working as of 2019-12-30 (YYYY-MM-DD)
 
 ## What
