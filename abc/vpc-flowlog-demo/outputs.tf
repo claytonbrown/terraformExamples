@@ -9,9 +9,13 @@ output "user_login" {
     value = "root"
 }
 
-# ECS instance private IP address
-output "ecs_public_ip" {
-    description = "ECS instance public IP"
-    value = "${alicloud_instance.flowlog-example-ecs.public_ip}"
+# ECS instance public IP addresses
+output "ecs_public_ip_a" {
+    description = "ECS instance public IP, instance A"
+    value = "${alicloud_instance.flowlog-example-ecs-a.public_ip}"
 }
 
+output "ecs_public_ip_b" {
+    description = "ECS instance public IP, instance B"
+    value = "${alicloud_instance.flowlog-example-ecs-b.public_ip}"
+}

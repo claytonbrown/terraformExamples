@@ -41,5 +41,3 @@ If you choose to execute `terraform destroy` by hand instead of using using `./d
 ## Architecture
 
 ![Simple FlowLog Test](diagrams/simple_flowlog_test.png)
-
-Coming soon! Still hammering out the final architecture.
