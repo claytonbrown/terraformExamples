@@ -4,6 +4,8 @@
 - Alibaba Cloud Provider Version: v1.58.0
 - Status: Script working as of 2019-10-22 (YYYY-MM-DD)
 
+See this script in action [here, on YouTube](https://www.youtube.com/watch?v=3QB7CBtKlJs&feature=youtu.be).
+
 ## What
 
 This terraform script sets up a Windows Server 2016 instance and automatically installs the Chrome browser using a PowerShell script borrowed from [here](https://medium.com/@uqualio/how-to-install-chrome-on-windows-with-powershell-290e7346271). 
