@@ -4,6 +4,8 @@
 - Alibaba Cloud Provider Version: 1.63
 - Status: Script working as of 2019-12-27 (YYYY-MM-DD)
 
+See this script in action [on YouTube](https://www.youtube.com/watch?v=Ywf6B0pjKZE&feature=youtu.be)!
+
 ## What
 
 This terraform script demonstrates how to use the [OSS Backend](https://www.terraform.io/docs/backends/types/oss.html). In Terraform, *backends* allow you to store your terraform *state* (.tfstate files) somewhere other than the local directory that holds your terraform code.
