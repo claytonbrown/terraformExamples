@@ -4,7 +4,7 @@
 
 - Terraform Version: v0.12.6
 - Alibaba Cloud Provider Version: v1.63
-- Status: Script **not working** as of 2019-12-10 (YYYY-MM-DD)
+- Status: Script working as of 2019-12-30 (YYYY-MM-DD)
 
 ## What
 
@@ -41,5 +41,7 @@ When you are done playing and are ready to delete all the resource created by te
 If you choose to execute `terraform destroy` by hand instead of using using `./destroy.sh`, be aware that the SSH key .pem file will **not** be deleted by terraform. This can cause problems if you try to execute `./setup.sh` or `terraform apply` again in the future, as this old .pem file will prevent a new .pem keyfile from being written, which will **cause your login attempts to fail**.
 
 ## Architecture
+
+![Simple FlowLog Test](diagrams/simple_flowlog_test.png)
 
 Coming soon! Still hammering out the final architecture.

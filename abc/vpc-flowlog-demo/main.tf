@@ -66,59 +66,6 @@ resource "alicloud_key_pair" "flowlog-example-ssh-key" {
   key_file = "flowlog-example-ssh-key.pem"
 }
 
-#
-# Create external network connection interfaces for tesitng purposes
-#
-# 1 - VPN Gateway (inbound private traffic)
-# 2 - NAT Gateway (outbound internet traffic)
-#
-resource "alicloud_vpn_gateway" "flowlog-example-vpn-gateway" {
-  name                 = "flowlog-example-vpn-gateway"
-  vpc_id               = "${alicloud_vpc.flowlog-example-vpc.id}"
-  bandwidth            = "10"
-  enable_ssl           = true
-  instance_charge_type = "PostPaid" # WARNING: This must be changed to PrePaid when using aliyun.com
-  description          = "flowlog-example-vpn-gateway"
-}
-
-# VPN Configuration (VPN Server, Client Cert)
-resource "alicloud_ssl_vpn_server" "flowlog-ssl-vpn-server" {
-  name = "flowlog-ssl-vpn-server"
-  vpn_gateway_id = "${alicloud_vpn_gateway.flowlog-example-vpn-gateway.id}"
-  client_ip_pool = "10.0.0.0/16"
-  local_subnet = "${alicloud_vpc.flowlog-example-vpc.cidr_block}"
-}
-
-resource "alicloud_ssl_vpn_client_cert" "flowlog-ssl-vpn-client-cert" {
-  name = "flowlog-ssl-vpn-client-cert"
-  ssl_vpn_server_id = "${alicloud_ssl_vpn_server.flowlog-ssl-vpn-server.id}"
-}
-
-
-# NAT Gateway setup
-resource "alicloud_nat_gateway" "flowlog-example-nat-gateway" {
-  vpc_id = "${alicloud_vpc.flowlog-example-vpc.id}"
-  specification = "Small"
-  name   = "flowlog-example-nat-gateway"
-}
-
-# EIP and EIP binding for NAT Gateway
-resource "alicloud_eip" "flowlog-example-nat-gateway-eip" {
-  name = "flowlog-example-nat-gateway-eip"
-}
-
-resource "alicloud_eip_association" "flowlog-nat-gateway-eip-assoc" {
-  allocation_id = "${alicloud_eip.flowlog-example-nat-gateway-eip.id}"
-  instance_id   = "${alicloud_nat_gateway.flowlog-example-nat-gateway.id}"
-}
-
-# Outbound (SNAT) entry
-resource "alicloud_snat_entry" "flowlog-example-snat-entry" {
-  snat_table_id     = "${alicloud_nat_gateway.flowlog-example-nat-gateway.snat_table_ids}"
-  source_vswitch_id = "${alicloud_vswitch.flowlog-example-vswitch.id}"
-  snat_ip           = "${join(",", alicloud_eip.flowlog-example-nat-gateway-eip.*.ip_address)}"
-}
-
 # 
 # Create ECS instance
 #
@@ -134,7 +81,7 @@ resource "alicloud_instance" "flowlog-example-ecs" {
 
   key_name = "${alicloud_key_pair.flowlog-example-ssh-key.key_name}"
 
-  internet_max_bandwidth_out = 0 # Make sure instance is NOT granted a public IP
+  internet_max_bandwidth_out = 10 # Make sure instance IS granted a public IP
 }
 
 #
@@ -157,3 +104,4 @@ resource "alicloud_log_store" "vpc-logstore" {
   max_split_shard_count = 60
   append_meta           = true
 }
+
