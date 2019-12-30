@@ -10,9 +10,13 @@ This script demonstrates how to automatically create a custom [RAM Policy](https
 
 This is the "best practice" for accessing other cloud services from ECS: wherever possible, you should avoid storing Access Keys and Secrets on your ECS instances. 
 
+### Prefer a Video?
+
+Want to see this script in action? Check out this [YouTube Video](https://www.youtube.com/watch?v=q4c5Nkv7JFA&feature=youtu.be).
+
 ## Why
 
-Writing customer RAM Policy can be challenging. This example can get you up to speed quickly, so you have a better understanding of how RAM Policy works, and can incorporate it into your own Terraform code.
+Writing custom RAM policies can be challenging. This example can get you up to speed quickly, so you have a better understanding of how RAM Policy works, and can incorporate it into your own Terraform code.
 
 ## How 
 
