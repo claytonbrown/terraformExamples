@@ -4,7 +4,7 @@
 - Alibaba Cloud Provider Version: v1.63
 - Status: Script working as of 2019-12-17 (YYYY-MM-DD)
 
-See this script in action [on YouTube](https://www.youtube.com/watch?v=9O9KPQ-O-IY&feature=youtu.be)!
+See this script in action [on YouTube](https://www.youtube.com/watch?v=K_n-rLNxNks&feature=youtu.be)!
 
 ## What
 
