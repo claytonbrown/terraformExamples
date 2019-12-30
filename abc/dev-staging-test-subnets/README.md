@@ -4,6 +4,8 @@
 - Alibaba Cloud Provider Version: v1.58.0
 - Status: Script working as of 2019-10-22 (YYYY-MM-DD)
 
+See this script in action [on YouTube](https://www.youtube.com/watch?v=M1j4RjmhZtQ&feature=youtu.be)!
+
 ## What
 
 This terraform script sets up a new VPC group with four subnets (each with its own vSwitch):
