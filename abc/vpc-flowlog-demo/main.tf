@@ -67,10 +67,25 @@ resource "alicloud_key_pair" "flowlog-example-ssh-key" {
 }
 
 # 
-# Create ECS instance
+# Create ECS instances
 #
-resource "alicloud_instance" "flowlog-example-ecs" {
-  instance_name = "flowlog-example-ecs"
+resource "alicloud_instance" "flowlog-example-ecs-a" {
+  instance_name = "flowlog-example-ecs-a"
+
+  image_id = "${var.abc_image_id}"
+
+  instance_type        = "${data.alicloud_instance_types.cores2mem8g.instance_types.0.id}"
+  system_disk_category = "cloud_efficiency"
+  security_groups      = ["${alicloud_security_group.flowlog-example-sg.id}"]
+  vswitch_id           = "${alicloud_vswitch.flowlog-example-vswitch.id}"
+
+  key_name = "${alicloud_key_pair.flowlog-example-ssh-key.key_name}"
+
+  internet_max_bandwidth_out = 10 # Make sure instance IS granted a public IP
+}
+
+resource "alicloud_instance" "flowlog-example-ecs-b" {
+  instance_name = "flowlog-example-ecs-b"
 
   image_id = "${var.abc_image_id}"
 
@@ -104,4 +119,3 @@ resource "alicloud_log_store" "vpc-logstore" {
   max_split_shard_count = 60
   append_meta           = true
 }
-
