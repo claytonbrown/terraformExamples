@@ -4,6 +4,8 @@
 - Alibaba Cloud Provider Version: v1.58
 - Status: Script working as of 2019-10-27 (YYYY-MM-DD)
 
+See this script in action [on Youtube](https://www.youtube.com/watch?v=15ZfFnSC1W4&feature=youtu.be)!
+
 ## What
 
 This script creates a single ECS instance with Apache installed. The script's purpose is to illustrate how to use Terraform with Alibaba Cloud. The script goes along with a [video tutorial](https://www.youtube.com/watch?v=xlm_htUWsT0) I posted to YouTube. Feel free to check that out!
