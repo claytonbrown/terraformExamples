@@ -10,6 +10,10 @@ This script sets up a VPN Gateway and NAT Gateway attached to a VPC group, then 
 
 The ECS instance only has a private IP address, so it has no access to the internet on its own. The machine can make outbound connections via NAT Gateway (say, for software updates) and you can make inbound connections via SSL over the VPN Gateway (once you have configured an SSL VPN client on your local machine).
 
+### Prefer a Video? 
+
+See a video of this script in action [here, on YouTube](https://www.youtube.com/watch?v=9O9KPQ-O-IY&feature=youtu.be). 
+
 ## Why
 
 Network setup on the cloud is something new users struggle with. This script is a reference new users can consult to learn the relationship between VPC groups, VPN and NAT Gateways, and associated bindings and configurations (SNAT rules, Elastic IPs, and so on).
