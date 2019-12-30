@@ -4,15 +4,13 @@
 - Alibaba Cloud Provider Version: v1.63
 - Status: Script working as of 2019-12-18 (YYYY-MM-DD)
 
+See this script in action [on YouTube](https://www.youtube.com/watch?v=q4c5Nkv7JFA&feature=youtu.be)!
+
 ## What
 
 This script demonstrates how to automatically create a custom [RAM Policy](https://www.alibabacloud.com/help/doc-detail/100680.htm) and bind it to an ECS instance.
 
 This is the "best practice" for accessing other cloud services from ECS: wherever possible, you should avoid storing Access Keys and Secrets on your ECS instances. 
-
-### Prefer a Video?
-
-Want to see this script in action? Check out this [YouTube Video](https://www.youtube.com/watch?v=q4c5Nkv7JFA&feature=youtu.be).
 
 ## Why
 

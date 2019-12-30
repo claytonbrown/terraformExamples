@@ -4,6 +4,8 @@
 - Alibaba Cloud Provider Version: v1.58.0
 - Status: Script working as of 2019-10-22 (YYYY-MM-DD)
 
+See this script in action [on YouTube](https://www.youtube.com/watch?v=wKj864GXNjY&feature=youtu.be)!
+
 ## What
 
 This terraform script sets up ownCloud (the open source file sharing and document management solution) on an ECS instance running Ubuntu 18.04. A separate RDS database is also configured, rather than locally installing MySQL. An EIP is assigned to the ECS instance so that the instance can be replaced in the future without the need to change the public IP address associated with ownCloud.
