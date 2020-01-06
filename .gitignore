@@ -2,6 +2,7 @@
 *.tfstate*
 .terraform
 *.pem
+*.key
 *.tfvars
 **/ansible/group_vars/*
 **/ansible/hosts
