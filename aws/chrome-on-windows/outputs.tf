@@ -10,7 +10,7 @@ output "username" {
 
 output "password" {
   description = "Password for RDP login"
-  value       = "${rsadecrypt(aws_instance.ec2-chrome-on-win-instance.password_data, file(var.public_key_file))}"
+  value       = "${rsadecrypt(aws_instance.ec2-chrome-on-win-instance.password_data, file(var.key_file))}"
 }
 
 output "ip" {

@@ -24,9 +24,19 @@ variable "access_key_secret" {
 # Note: if you change the default key file name here, you should make sure to modify
 # keysetup.sh accordingly
 #
+variable "key_file" {
+  description = "The private key we will use to descrypt the Windows instance password data field"
+  default = "ec2-key-private.pem"
+}
+
 variable "public_key_file" {
-  description = "The public keyfile we will use to descrypt the Windows instance password data field"
-  default = "ec2-win-key.key"
+  description = "The public key"
+  default = "ec2-key-public.pem"
+}
+
+variable "ssh_public_key_file" {
+  description = "Public key, converted to SSH key format for use with the aws_instance resource"
+  default = "ec2-ssh-key-public.key"
 }
 
 variable "region" {

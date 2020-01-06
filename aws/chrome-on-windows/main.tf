@@ -130,6 +130,26 @@ resource "aws_security_group_rule" "allow-ping-in" {
   security_group_id = "${aws_security_group.ec2-chrome-on-win-sg.id}"
 }
 
+resource "aws_security_group_rule" "allow-http-in" {
+  type        = "ingress"
+  from_port   = 80
+  to_port     = 80
+  protocol    = "tcp"
+  cidr_blocks = ["0.0.0.0/0"] # WARNING: Open from everywhere
+
+  security_group_id = "${aws_security_group.ec2-chrome-on-win-sg.id}"
+}
+
+resource "aws_security_group_rule" "allow-https-in" {
+  type        = "ingress"
+  from_port   = 443
+  to_port     = 443
+  protocol    = "tcp"
+  cidr_blocks = ["0.0.0.0/0"] # WARNING: Open from everywhere
+
+  security_group_id = "${aws_security_group.ec2-chrome-on-win-sg.id}"
+}
+
 resource "aws_security_group_rule" "allow-http-out" {
   type        = "egress"
   from_port   = 80
@@ -158,7 +178,7 @@ resource "aws_security_group_rule" "allow-https-out" {
 ###
 resource "aws_key_pair" "ec2-chrome-on-win-ssh-key" {
   key_name   = "ec2-win-key"
-  public_key = "${file(var.public_key_file)}"
+  public_key = "${file(var.ssh_public_key_file)}"
 }
 
 ###
@@ -168,6 +188,8 @@ resource "aws_instance" "ec2-chrome-on-win-instance" {
 
   ami           = "${data.aws_ami.windows-server.id}"
   instance_type = "t2.micro"
+
+  get_password_data = true
 
   vpc_security_group_ids = ["${aws_security_group.ec2-chrome-on-win-sg.id}"] # Ensure we have bound our security group
   subnet_id              = "${aws_subnet.ec2-chrome-on-win-subnet.id}"       # Ensure instance is launched in the subnet we created
