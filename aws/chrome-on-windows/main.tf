@@ -130,40 +130,20 @@ resource "aws_security_group_rule" "allow-ping-in" {
   security_group_id = "${aws_security_group.ec2-chrome-on-win-sg.id}"
 }
 
-resource "aws_security_group_rule" "allow-http-in" {
-  type        = "ingress"
-  from_port   = 80
-  to_port     = 80
-  protocol    = "tcp"
-  cidr_blocks = ["0.0.0.0/0"] # WARNING: Open from everywhere
-
-  security_group_id = "${aws_security_group.ec2-chrome-on-win-sg.id}"
-}
-
-resource "aws_security_group_rule" "allow-https-in" {
-  type        = "ingress"
-  from_port   = 443
-  to_port     = 443
-  protocol    = "tcp"
-  cidr_blocks = ["0.0.0.0/0"] # WARNING: Open from everywhere
-
-  security_group_id = "${aws_security_group.ec2-chrome-on-win-sg.id}"
-}
-
-resource "aws_security_group_rule" "allow-http-out" {
+resource "aws_security_group_rule" "allow-ping-out" {
   type        = "egress"
-  from_port   = 80
-  to_port     = 80
-  protocol    = "tcp"
+  from_port   = -1
+  to_port     = -1
+  protocol    = "icmp"
   cidr_blocks = ["0.0.0.0/0"] # WARNING: Open from everywhere
 
   security_group_id = "${aws_security_group.ec2-chrome-on-win-sg.id}"
 }
 
-resource "aws_security_group_rule" "allow-https-out" {
+resource "aws_security_group_rule" "allow-everything-out" {
   type        = "egress"
-  from_port   = 443
-  to_port     = 443
+  from_port   = 1
+  to_port     = 65535
   protocol    = "tcp"
   cidr_blocks = ["0.0.0.0/0"] # WARNING: Open from everywhere
 
