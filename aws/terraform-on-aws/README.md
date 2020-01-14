@@ -28,6 +28,8 @@ That should automatically execute `terraform apply`, in addition to running `ssh
 terraform plan
 ```
 
+**Warning:** `terraform plan` will fail if you have not yet generated an SSH key. Have a look at the first line in `setup.sh` to see how that's done.
+
 When you are done playing with the environment and are ready to delete all the resources created by terraform,simply run:
 
 ```

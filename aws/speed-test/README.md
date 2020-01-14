@@ -1,14 +1,12 @@
 # Stress Test: Performance and Network Testing
 
-- Terraform Version: v0.12.12
-- Alibaba Cloud Provider Version: v1.58.0
-- Status: Script working as of 2019-10-22 (YYYY-MM-DD)
-
-See this script in action [on YouTube](https://www.youtube.com/watch?v=AFv4mBDiM1g&feature=youtu.be)!
+- Terraform Version: v0.12.13
+- AWS Provider Version: v2.43
+- Status: Script working as of 2020-01-14 (YYYY-MM-DD)
 
 ## What
 
-This terraform script sets up a single ECS instance and installs some stress testing and network performance testing tools (iperf, stress).
+This terraform script sets up a single EC2 instance and installs some stress testing and network performance testing tools (iperf, stress).
 
 - iperf is used for network throughput testing
 - stress is used to create arbitrary CPU, memory, and disk loads
@@ -33,7 +31,9 @@ That should automatically execute `terraform apply`. If you are curious about wh
 terraform plan
 ```
 
-When you are done playing with the speed test ECS instance and are ready to delete all the resources created by terraform, run:
+**Warning:** `terraform plan` will fail if you have not yet generated an SSH key. Have a look at the first line in `setup.sh` to see how that's done.
+
+When you are done playing with the speed test EC2 instance and are ready to delete all the resources created by terraform, run:
 
 ```
 ./destroy.sh
