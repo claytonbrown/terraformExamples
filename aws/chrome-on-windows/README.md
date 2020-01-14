@@ -4,6 +4,8 @@
 - AWS Provider Version: v2.43
 - Status: Script working as of 2020-01-07 (YYYY-MM-DD)
 
+Curious how this script works? See a demo on YouTube [here](https://www.youtube.com/watch?v=mhqy-FDhDoc).
+
 ## What
 
 This terraform script sets up a Windows Server 2019 instance and automatically installs the Chrome browser using a PowerShell script borrowed from [here](https://medium.com/@uqualio/how-to-install-chrome-on-windows-with-powershell-290e7346271). 

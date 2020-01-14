@@ -4,6 +4,8 @@
 - AWS Provider Version: v2.43
 - Status: Script working as of 2020-01-06 (YYYY-MM-DD)
 
+Curious to see how the script works? See a demo [here](https://www.youtube.com/watch?v=uMdw_BbeYAM) on YouTube. 
+
 ## What
 
 This script creates a single EC2 instance with Apache installed. The script's purpose is to illustrate how to use terraform with AWS.
