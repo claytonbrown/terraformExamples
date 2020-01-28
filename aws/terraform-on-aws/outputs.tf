@@ -10,6 +10,6 @@ output "user_login" {
 }
 
 output "public_ip" {
-  description = "EC2 instance public IP address"
+  description = "EC2 instance public IP address (for bastion host)"
   value       = "${aws_instance.ec2-example-instance.public_ip}"
 }
