@@ -215,6 +215,17 @@ resource "aws_security_group_rule" "allow-ping-in" {
   security_group_id = "${aws_security_group.owncloud-sg.id}"
 }
 
+# Allow outbound DB connections
+resource "aws_security_group_rule" "db-outbound" {
+  type                     = "egress"
+  from_port                = 3306
+  to_port                  = 3306
+  protocol                 = "tcp"
+  source_security_group_id = "${aws_security_group.owncloud-db-sg.id}"
+
+  security_group_id = "${aws_security_group.owncloud-sg.id}"
+}
+
 ###
 # SSH Key Configuration
 ###
@@ -258,6 +269,24 @@ resource "aws_instance" "owncloud-instance" {
 # Database configuration
 ###
 
+# Database security group
+resource "aws_security_group" "owncloud-db-sg" {
+  name        = "owncloud-db-sg"
+  description = "Security group for ownCloud DB server"
+  vpc_id      = "${aws_vpc.owncloud-vpc.id}"
+}
+
+resource "aws_security_group_rule" "db-inbound" {
+  type                     = "ingress"
+  from_port                = 3306
+  to_port                  = 3306
+  protocol                 = "tcp"
+  source_security_group_id = "${aws_security_group.owncloud-sg.id}"
+
+  security_group_id = "${aws_security_group.owncloud-db-sg.id}"
+}
+
+
 # Create "DB Subnet Group"
 resource "aws_db_subnet_group" "owncloud-db-subnet-group" {
   name       = "owncloud-db-subnet-group"
@@ -279,7 +308,7 @@ resource "aws_db_instance" "owncloud-db-instance" {
   username               = "${var.db_username}"
   password               = "${var.db_password}"
   parameter_group_name   = "default.mysql5.7"
-  vpc_security_group_ids = ["${aws_security_group.owncloud-sg.id}"]
+  vpc_security_group_ids = ["${aws_security_group.owncloud-db-sg.id}"]
   db_subnet_group_name   = "${aws_db_subnet_group.owncloud-db-subnet-group.name}"
   skip_final_snapshot    = true
 }

@@ -16,7 +16,7 @@ output "ssh_key_name" {
 
 output "ec2_ip" {
   description = "Public IP address of EC2 instance"
-  value       = "${aws_instance.owncloud-instance.public_ip}"
+  value       = "${aws_eip.owncloud-eip.public_ip}"
 }
 
 output "db_name" {
