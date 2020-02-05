@@ -59,7 +59,7 @@ This will set up a Windows Server ECS instance and automatically install the Chr
 ./destroy.sh
 ```
 
-This will automatically destory the ECS instance and its associated resources (security groups, VPC group, etc...). That's it!
+This will automatically destroy the ECS instance and its associated resources (security groups, VPC group, etc...). That's it!
 
 
 ## Notes and Warnings
