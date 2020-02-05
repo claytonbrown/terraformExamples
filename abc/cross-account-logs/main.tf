@@ -44,7 +44,7 @@ provider "alicloud" {
 # Create a local variable to hold the account UIDs
 # of all the accounts we'd like to collect logs from
 # under the master account
-locals = {
+locals {
   account_ids = ["${var.other_uid}"]
 }
 
@@ -56,6 +56,7 @@ module "root_actiontrail" {
   }
   # WARNING: Don't forget to add IDs for each new account you create in your organization
   account_ids = "${local.account_ids}"
+
 }
 
 # ActionTrail Configuration (other account or accounts)
@@ -64,4 +65,5 @@ module "sub_actiontrail" {
   providers = {
     alicloud = "alicloud.other"
   }
+  root_uid = "${var.root_uid}"
 }

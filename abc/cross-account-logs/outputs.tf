@@ -10,5 +10,5 @@ output "root_uid" {
 
 output "other_uid" {
   description = "UID of other account"
-  value = "${var.other_uid}"
+  value       = "${var.other_uid}"
 }
