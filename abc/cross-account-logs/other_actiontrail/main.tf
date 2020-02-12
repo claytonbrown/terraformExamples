@@ -2,8 +2,8 @@
 # Configure Cross-Account SLS Audit Role (sub_actiontrail)
 #
 # Author: Jeremy Pedersen
-# Created 2020-01-27
-# Updated: 2020-01-30
+# Created 2020-02-05
+# Updated: 2020-02-05
 
 ###
 # RAM role configuration to allow cross-account access to ActionTrail 
