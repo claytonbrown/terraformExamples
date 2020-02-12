@@ -44,25 +44,25 @@ data "aws_ami" "windows-server" {
 ###
 
 # Create VPC
-resource "aws_vpc" "ec2-chrome-on-win-vpc" {
+resource "aws_vpc" "ec2-ssh-on-win-vpc" {
 
   cidr_block = "172.16.0.0/16"
 
   tags = {
-    Name = "ec2-chrome-on-win-vpc"
+    Name = "ec2-ssh-on-win-vpc"
   }
 }
 
 # Create subnet
-resource "aws_subnet" "ec2-chrome-on-win-subnet" {
-  vpc_id            = "${aws_vpc.ec2-chrome-on-win-vpc.id}"
+resource "aws_subnet" "ec2-ssh-on-win-subnet" {
+  vpc_id            = "${aws_vpc.ec2-ssh-on-win-vpc.id}"
   cidr_block        = "172.16.0.0/24"
   availability_zone = "${data.aws_availability_zones.aws_zones.names[0]}"
 
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "ec2-chrome-on-win-subnet"
+    Name = "ec2-ssh-on-win-subnet"
   }
 }
 
@@ -71,32 +71,32 @@ resource "aws_subnet" "ec2-chrome-on-win-subnet" {
 ###
 
 # Create internet gateway (necessary to give Internet access to non-default VPCs on AWS)
-resource "aws_internet_gateway" "ec2-chrome-on-win-internet-gw" {
-  vpc_id = "${aws_vpc.ec2-chrome-on-win-vpc.id}"
+resource "aws_internet_gateway" "ec2-ssh-on-win-internet-gw" {
+  vpc_id = "${aws_vpc.ec2-ssh-on-win-vpc.id}"
 
   tags = {
-    Name = "ec2-chrome-on-win-internet-gw"
+    Name = "ec2-ssh-on-win-internet-gw"
   }
 }
 
 # Define route for internet traffic
-resource "aws_route_table" "ec2-chrome-on-win-route-table" {
-  vpc_id = "${aws_vpc.ec2-chrome-on-win-vpc.id}"
+resource "aws_route_table" "ec2-ssh-on-win-route-table" {
+  vpc_id = "${aws_vpc.ec2-ssh-on-win-vpc.id}"
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.ec2-chrome-on-win-internet-gw.id}"
+    gateway_id = "${aws_internet_gateway.ec2-ssh-on-win-internet-gw.id}"
   }
 
   tags = {
-    Name = "ec2-chrome-on-win-route-table"
+    Name = "ec2-ssh-on-win-route-table"
   }
 }
 
 # Associate the route table with our subnet
-resource "aws_route_table_association" "ec2-chrome-on-win-route-table-assoc" {
-  subnet_id      = "${aws_subnet.ec2-chrome-on-win-subnet.id}"
-  route_table_id = "${aws_route_table.ec2-chrome-on-win-route-table.id}"
+resource "aws_route_table_association" "ec2-ssh-on-win-route-table-assoc" {
+  subnet_id      = "${aws_subnet.ec2-ssh-on-win-subnet.id}"
+  route_table_id = "${aws_route_table.ec2-ssh-on-win-route-table.id}"
 }
 
 ###
@@ -104,10 +104,10 @@ resource "aws_route_table_association" "ec2-chrome-on-win-route-table-assoc" {
 ###
 
 # Create security group, and associate rules
-resource "aws_security_group" "ec2-chrome-on-win-sg" {
+resource "aws_security_group" "ec2-ssh-on-win-sg" {
   name        = "ec2-example-sg"
   description = "Allow inbound ping, RDP, and HTTP/S traffic"
-  vpc_id      = "${aws_vpc.ec2-chrome-on-win-vpc.id}"
+  vpc_id      = "${aws_vpc.ec2-ssh-on-win-vpc.id}"
 }
 
 resource "aws_security_group_rule" "allow-rdp-in" {
@@ -117,7 +117,17 @@ resource "aws_security_group_rule" "allow-rdp-in" {
   protocol    = "tcp"
   cidr_blocks = ["0.0.0.0/0"] # WARNING: Open from everywhere
 
-  security_group_id = "${aws_security_group.ec2-chrome-on-win-sg.id}"
+  security_group_id = "${aws_security_group.ec2-ssh-on-win-sg.id}"
+}
+
+resource "aws_security_group_rule" "allow-ssh-in" {
+  type        = "ingress"
+  from_port   = 22
+  to_port     = 22
+  protocol    = "tcp"
+  cidr_blocks = ["0.0.0.0/0"] # WARNING: Open from everywhere
+
+  security_group_id = "${aws_security_group.ec2-ssh-on-win-sg.id}"
 }
 
 resource "aws_security_group_rule" "allow-everything-out" {
@@ -127,7 +137,7 @@ resource "aws_security_group_rule" "allow-everything-out" {
   protocol    = "tcp"
   cidr_blocks = ["0.0.0.0/0"] # WARNING: Open from everywhere
 
-  security_group_id = "${aws_security_group.ec2-chrome-on-win-sg.id}"
+  security_group_id = "${aws_security_group.ec2-ssh-on-win-sg.id}"
 }
 
 ###
@@ -136,7 +146,7 @@ resource "aws_security_group_rule" "allow-everything-out" {
 # Note: On AWS, this key is used to decrypt the password
 # that AWS auto-generates for each new Windows instance
 ###
-resource "aws_key_pair" "ec2-chrome-on-win-ssh-key" {
+resource "aws_key_pair" "ec2-ssh-on-win-ssh-key" {
   key_name   = "ec2-win-key"
   public_key = "${file(var.ssh_public_key_file)}"
 }
@@ -144,22 +154,22 @@ resource "aws_key_pair" "ec2-chrome-on-win-ssh-key" {
 ###
 # EC2 Configuration
 ###
-resource "aws_instance" "ec2-chrome-on-win-instance" {
+resource "aws_instance" "ec2-ssh-on-win-instance" {
 
   ami           = "${data.aws_ami.windows-server.id}"
   instance_type = "t2.micro"
 
   get_password_data = true
 
-  vpc_security_group_ids = ["${aws_security_group.ec2-chrome-on-win-sg.id}"] # Ensure we have bound our security group
-  subnet_id              = "${aws_subnet.ec2-chrome-on-win-subnet.id}"       # Ensure instance is launched in the subnet we created
+  vpc_security_group_ids = ["${aws_security_group.ec2-ssh-on-win-sg.id}"] # Ensure we have bound our security group
+  subnet_id              = "${aws_subnet.ec2-ssh-on-win-subnet.id}"       # Ensure instance is launched in the subnet we created
 
-  key_name = "${aws_key_pair.ec2-chrome-on-win-ssh-key.key_name}"
+  key_name = "${aws_key_pair.ec2-ssh-on-win-ssh-key.key_name}"
 
   # Powershell script to install Chrome
-  user_data = "${filebase64("install_chrome.ps1")}"
+  user_data = "${filebase64("install_chrome_ssh.ps1")}"
 
   tags = {
-    Name = "ec2-chrome-on-win-instance"
+    Name = "ec2-ssh-on-win-instance"
   }
 }
