@@ -28,7 +28,13 @@ First, copy `terraform.tfvars.example` to `terraform.tfvars`. Fill in your acces
 terraform init
 ```
 
-If you want to confirm the set of resources terraform will create or change, then run `terraform plan`, otherwise, just directly run:
+Before you proceed to running `plan` or `apply`, it's important to set up an SSH key. Both `plan` and `apply` are going to look for private key file locally as it's needed when setting up EC2 instances. You can create this file like so:
+
+```
+./keysetup.sh
+```
+
+Once you've done that, if you want to confirm the set of resources terraform will create or change, then run `terraform plan`, otherwise, just directly run:
 
 ```
 ./setup.sh
