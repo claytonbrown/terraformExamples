@@ -9,3 +9,4 @@ Set-Service sshd -StartupType Automatic;
 Set-Service ssh-agent -StartupType Automatic;
 Start-Service sshd;
 Start-Service ssh-agent;
+New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
