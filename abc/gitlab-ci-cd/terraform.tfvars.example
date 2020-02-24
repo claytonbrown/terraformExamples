@@ -14,7 +14,6 @@ dm_mx_record_value = "mxdm-ap-southeast-1.aliyun.com"
 dm_cname_host_record = "dmtrace.mail"
 dm_cname_record_value = "tracedm-ap-southeast-1.aliyuncs.com"
 directmail_email = "gitlab@mail.your_domain.com"
-directmail_password = "your_dm_password"  # 10 to 20 characters long: can ONLY contain letters and numbers, and MUST contain at least two uppercase letters, two numbers, and two lowercase letters (and these letters and numbers CANNOT repeat!)
 email_address= "your_email@outlook.com"
 directmail_smtp_address = "smtpdm-ap-southeast-1.aliyun.com"
 sonarqube_db_password = "atahYeif1aiDae3Meigh" # At least 9 characters: 2 numbers, two uppercase letters, two lowercase letters
