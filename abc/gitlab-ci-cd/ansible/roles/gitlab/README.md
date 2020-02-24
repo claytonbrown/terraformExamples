@@ -35,7 +35,7 @@ This role is intended to be run **once** against a clean Ubuntu 18.x host. I hav
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------
