@@ -19,4 +19,4 @@ email_address= "your_email@outlook.com"
 directmail_smtp_address = "smtpdm-ap-southeast-1.aliyun.com"
 sonarqube_db_password = "atahYeif1aiDae3Meigh" # At least 9 characters: 2 numbers, two uppercase letters, two lowercase letters
 sonarqube_db_username = "sonarqube"
-alicloud_image_id = "ubuntu_18_04_64_20G_alibase_20190624.vhd"
+alicloud_image_id = "ubuntu_18_04_x64_20G_alibase_20191225.vhd"

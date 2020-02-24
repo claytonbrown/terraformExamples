@@ -5,7 +5,7 @@ rm ansible/group_vars/*
 
 # Remove PostgreSQL database account from the terraform state file
 # (resolves an issue with resource deletion order during terraform destroy)
-terraform state rm alicloud_db_account.sonarqube_postgres_db_account
+#terraform state rm alicloud_db_account.sonarqube_postgres_db_account
 
 # Destroy the entire CI/CD environment
 # GitLab, SonarQube, and all supporting resources will be deleted

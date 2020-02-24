@@ -1,8 +1,9 @@
 # GitLab CI/CD
 
-- Terraform Version: 0.12
-- Alibaba Cloud Provider Version: 1.52
-- Status: Script working as of 2019-08-07 (YYYY-MM-DD)
+- Terraform Version: 0.12.13
+- Ansible Version: 2.9.4
+- Alibaba Cloud Provider Version: 1.71
+- Status: Script working as of 2020-02-24 (YYYY-MM-DD)
 
 ## What
 

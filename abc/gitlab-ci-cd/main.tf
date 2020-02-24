@@ -1,7 +1,7 @@
 #
 # This script sets up the infrasctructure required for running a simple CI/CD pipeline on 
-# Alibaba Cloud. Subsequent helper scripts configure and install software on top of the
-# infrastructure created here
+# Alibaba Cloud. Ansible scripts are then run to install and configure software on top of the
+# infrastructure created here.
 #
 # Author: Jeremy Pedersen
 # Creation Date: 2019-06-27
@@ -11,7 +11,7 @@ provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
-  version = "~> 1.58"
+  version = "~> 1.71"
 
 }
 
