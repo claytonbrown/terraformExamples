@@ -91,7 +91,7 @@
     dest: /etc/passwd-ossfs
     mode: '640'
 
-- name: create oss bucket mountpoint
+- name: create oss bucket mount point
   file:
     path: /mnt/gitlab-bucket
     state: 'directory'
@@ -122,7 +122,7 @@
     post_reboot_delay: 10
 
 - name: update gitlab configuration file
-  template: 
+  template:
     src: templates/gitlab.rb.j2
     dest: /etc/gitlab/gitlab.rb
 

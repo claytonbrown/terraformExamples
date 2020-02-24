@@ -17,5 +17,6 @@ echo "APT::Periodic::AutocleanInterval \"7\";" >> /etc/apt/apt.conf.d/20auto-upg
 unattended-upgrade -d
 
 # Create file in /root to indicate the script has completed 
-# This is used by Ansible to make sure this script is only run once
+# Ansible checks for this file: if it finds this file
+# on a subsequent run, it will *not* re-run this script
 touch /root/.ansible_unattended_upgrades_enabled

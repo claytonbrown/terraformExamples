@@ -30,7 +30,7 @@ This role is extremely simple to use. The easiest way to include this role in yo
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------
