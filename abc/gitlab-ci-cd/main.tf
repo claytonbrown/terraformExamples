@@ -11,18 +11,20 @@ provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
-  version = "~> 1.71"
+  version    = "~> 1.71"
 
 }
 
 # Get a list of availability zones in our selected region
-data "alicloud_zones" "abc_zones" {}
+data "alicloud_zones" "abc_zones" {
+  multi = true
+}
 
 # Get a list of mid-range instnace types we can use
 # in the first zone in this region
 data "alicloud_instance_types" "cores2mem4g" {
-  memory_size = 4
-  cpu_core_count = 2
+  memory_size       = 4
+  cpu_core_count    = 2
   availability_zone = "${data.alicloud_zones.abc_zones.zones.0.id}"
 }
 
@@ -35,12 +37,27 @@ resource "alicloud_vpc" "cicd-demo-vpc" {
   cidr_block = "192.168.0.0/16"
 }
 
-resource "alicloud_vswitch" "cicd-demo-vswitch" {
+resource "alicloud_vswitch" "cicd-demo-vswitch-a" {
   name              = "cicd-demo-vswitch"
   vpc_id            = "${alicloud_vpc.cicd-demo-vpc.id}"
   cidr_block        = "192.168.0.0/24"
   availability_zone = "${data.alicloud_zones.abc_zones.zones.0.id}"
 }
+
+resource "alicloud_vswitch" "cicd-demo-vswitch-b" {
+  name              = "cicd-demo-vswitch"
+  vpc_id            = "${alicloud_vpc.cicd-demo-vpc.id}"
+  cidr_block        = "192.168.1.0/24"
+  availability_zone = "${data.alicloud_zones.abc_zones.zones.1.id}"
+}
+
+resource "alicloud_vswitch" "cicd-demo-vswitch-c" {
+  name              = "cicd-demo-vswitch"
+  vpc_id            = "${alicloud_vpc.cicd-demo-vpc.id}"
+  cidr_block        = "192.168.2.0/24"
+  availability_zone = "${data.alicloud_zones.abc_zones.zones.2.id}"
+}
+
 
 ###
 # Security Group Config
@@ -99,8 +116,8 @@ resource "random_pet" "bucket-name" {
 }
 
 resource "alicloud_oss_bucket" "gitlab-oss-bucket" {
-  bucket = "${random_pet.bucket-name.id}"
-  acl = "private" 
+  bucket        = "${random_pet.bucket-name.id}"
+  acl           = "private"
   force_destroy = "true"
 }
 
@@ -120,13 +137,13 @@ resource "alicloud_key_pair" "cicd-ssh-key" {
 
 # Create new PostgreSQL DB for SonarQube
 resource "alicloud_db_instance" "sonarqube_postgres_db_instance" {
-  engine               = "PostgreSQL"
-  engine_version       = "9.4"
-  instance_type        = "rds.pg.s2.large"
-  instance_storage     = "20"
-  instance_name        = "sonarqube-db-instance"
-  vswitch_id           = "${alicloud_vswitch.cicd-demo-vswitch.id}"
-  security_ips = ["${alicloud_instance.cicd-demo-sonar-ecs.private_ip}"]
+  engine           = "PostgreSQL"
+  engine_version   = "10.0"
+  instance_type    = "pg.n2.small.1"
+  instance_storage = "20"
+  instance_name    = "sonarqube-db"
+  vswitch_id       = "${alicloud_vswitch.cicd-demo-vswitch-c.id}"
+  security_ips     = ["${alicloud_instance.cicd-demo-sonar-ecs.private_ip}"]
 }
 
 resource "alicloud_db_account" "sonarqube_postgres_db_account" {
@@ -150,7 +167,7 @@ resource "alicloud_instance" "cicd-demo-gitlab-ecs" {
   instance_type        = "${data.alicloud_instance_types.cores2mem4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.cicd-demo-sg.id}"]
-  vswitch_id           = "${alicloud_vswitch.cicd-demo-vswitch.id}"
+  vswitch_id           = "${alicloud_vswitch.cicd-demo-vswitch-a.id}"
 
   # SSH Key for instance login
   key_name = "${var.ssh_key_name}"
@@ -168,14 +185,14 @@ resource "alicloud_instance" "cicd-demo-gitlab-runner-ecs" {
   instance_type        = "${data.alicloud_instance_types.cores2mem4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.cicd-demo-sg.id}"]
-  vswitch_id           = "${alicloud_vswitch.cicd-demo-vswitch.id}"
+  vswitch_id           = "${alicloud_vswitch.cicd-demo-vswitch-a.id}"
 
   # SSH Key for instance login
   key_name = "${var.ssh_key_name}"
 
   # Install gitlab runner and docker
   user_data = "${file("resources/configure_gitlab_runner.sh")}"
-  
+
   # Make sure a public IP is assigned (with bandwidth of 10 Mbps, which should be plenty)
   internet_max_bandwidth_out = 10
 }
@@ -184,11 +201,11 @@ resource "alicloud_instance" "cicd-demo-sonar-ecs" {
   instance_name = "cicd-demo-sonar-ecs"
 
   image_id = "${var.alicloud_image_id}"
-  
+
   instance_type        = "${data.alicloud_instance_types.cores2mem4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.cicd-demo-sg.id}"]
-  vswitch_id           = "${alicloud_vswitch.cicd-demo-vswitch.id}"
+  vswitch_id           = "${alicloud_vswitch.cicd-demo-vswitch-a.id}"
 
   # SSH Key for instance login
   key_name = "${var.ssh_key_name}"
@@ -208,7 +225,7 @@ resource "alicloud_eip" "gitlab-eip" {
 
 resource "alicloud_eip_association" "gitlab-eip-assoc" {
   allocation_id = "${alicloud_eip.gitlab-eip.id}"
-  instance_id = "${alicloud_instance.cicd-demo-gitlab-ecs.id}"
+  instance_id   = "${alicloud_instance.cicd-demo-gitlab-ecs.id}"
 }
 
 # EIP for SonarQube instance (5 Mbps bandwidth by default)
@@ -218,7 +235,7 @@ resource "alicloud_eip" "sonar-eip" {
 
 resource "alicloud_eip_association" "sonar-eip-assoc" {
   allocation_id = "${alicloud_eip.sonar-eip.id}"
-  instance_id = "${alicloud_instance.cicd-demo-sonar-ecs.id}"
+  instance_id   = "${alicloud_instance.cicd-demo-sonar-ecs.id}"
 }
 
 ###
@@ -227,18 +244,18 @@ resource "alicloud_eip_association" "sonar-eip-assoc" {
 
 # GitLab DNS Record
 resource "alicloud_dns_record" "gitlab-dns" {
-  name = "${var.domain}"
+  name        = "${var.domain}"
   host_record = "gitlab"
-  type = "A"
-  value = "${alicloud_eip.gitlab-eip.ip_address}"
+  type        = "A"
+  value       = "${alicloud_eip.gitlab-eip.ip_address}"
 }
 
 # SonarQube DNS Record
 resource "alicloud_dns_record" "sonar-dns" {
-  name = "${var.domain}"
+  name        = "${var.domain}"
   host_record = "sonar"
-  type = "A"
-  value = "${alicloud_eip.sonar-eip.ip_address}"
+  type        = "A"
+  value       = "${alicloud_eip.sonar-eip.ip_address}"
 }
 
 ###
@@ -247,35 +264,35 @@ resource "alicloud_dns_record" "sonar-dns" {
 
 # Ownership Verification
 resource "alicloud_dns_record" "directmail-ownership" {
-  name = "${var.domain}"
+  name        = "${var.domain}"
   host_record = "${var.dm_ownership_host_record}"
-  type = "TXT"
-  value = "${var.dm_ownership_record_value}"
+  type        = "TXT"
+  value       = "${var.dm_ownership_record_value}"
 }
 
 # SPF Verification
 resource "alicloud_dns_record" "directmail-spf" {
-  name = "${var.domain}"
+  name        = "${var.domain}"
   host_record = "${var.dm_spf_host_record}"
-  type = "TXT"
-  value = "${var.dm_spf_record_value}"
+  type        = "TXT"
+  value       = "${var.dm_spf_record_value}"
 }
 
 # MX Verification
 resource "alicloud_dns_record" "directmail-mx" {
-  name = "${var.domain}"
+  name        = "${var.domain}"
   host_record = "${var.dm_mx_host_record}"
-  type = "MX"
-  priority = "10" # This field is required for MX records
-  value = "${var.dm_mx_record_value}"
+  type        = "MX"
+  priority    = "10" # This field is required for MX records
+  value       = "${var.dm_mx_record_value}"
 }
 
 # CNAME Verification
 resource "alicloud_dns_record" "directmail-cname" {
-  name = "${var.domain}"
+  name        = "${var.domain}"
   host_record = "${var.dm_cname_host_record}"
-  type = "CNAME"
-  value = "${var.dm_cname_record_value}"
+  type        = "CNAME"
+  value       = "${var.dm_cname_record_value}"
 }
 
 ###
@@ -291,11 +308,11 @@ resource "alicloud_ram_user" "gitlab-demo-oss-fullaccess-user" {
 resource "alicloud_ram_user_policy_attachment" "gitlab-demo-oss-fullaccess-policy-attachment" {
   policy_name = "AliyunOSSFullAccess"
   policy_type = "System"
-  user_name = "${alicloud_ram_user.gitlab-demo-oss-fullaccess-user.name}"
+  user_name   = "${alicloud_ram_user.gitlab-demo-oss-fullaccess-user.name}"
 }
 
 resource "alicloud_ram_access_key" "gitlab-demo-oss-fullaccess-ak" {
-  user_name = "${alicloud_ram_user.gitlab-demo-oss-fullaccess-user.name}"
+  user_name   = "${alicloud_ram_user.gitlab-demo-oss-fullaccess-user.name}"
   secret_file = "oss-fullaccess.ak"
 }
 
@@ -312,11 +329,11 @@ resource "alicloud_ram_user" "gitlab-demo-fullaccess-user" {
 resource "alicloud_ram_user_policy_attachment" "gitlab-demo-fullaccess-policy-attachment" {
   policy_name = "AdministratorAccess"
   policy_type = "System"
-  user_name = "${alicloud_ram_user.gitlab-demo-fullaccess-user.name}"
+  user_name   = "${alicloud_ram_user.gitlab-demo-fullaccess-user.name}"
 }
 
 resource "alicloud_ram_access_key" "gitlab-demo-fullaccess-ak" {
-  user_name = "${alicloud_ram_user.gitlab-demo-fullaccess-user.name}"
+  user_name   = "${alicloud_ram_user.gitlab-demo-fullaccess-user.name}"
   secret_file = "fullaccess.ak"
 }
 
