@@ -18,7 +18,7 @@ variable "access_key_secret" {
 # OS Version (Disk Image ID) to use
 variable "alicloud_image_id" {
     description = "Disk image to use when creating new ECS instances"
-    default = "ubuntu_18_04_64_20G_alibase_20190624.vhd"
+    default = "ubuntu_18_04_x64_20G_alibase_20191225.vhd"
 }
 
 # SSH key for ECS instance login (GitLab host and SonarQube host)
