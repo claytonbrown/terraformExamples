@@ -3,7 +3,7 @@
 - Terraform Version: 0.12.13
 - Ansible Version: 2.9.4
 - Alibaba Cloud Provider Version: 1.71
-- Status: Script working as of 2020-02-24 (YYYY-MM-DD)
+- Status: Script working as of 2020-02-25 (YYYY-MM-DD)
 
 ## What
 
