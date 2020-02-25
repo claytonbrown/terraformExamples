@@ -97,10 +97,6 @@ variable "directmail_email" {
     description = "DirectMail email address from the 'Sender Addresses' section of the DirectMail console"
 }
 
-variable "directmail_password" {
-    description = "The SMTP password entered into 'Sender Addresses' -> 'Set SMTP password' in the DirectMail console"
-}
-
 variable "email_address" {
     description = "Email address to be used as the contact point for LetsEncrypt certificate registration"
 }
