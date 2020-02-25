@@ -1,4 +1,4 @@
 #!/bin/bash
 export PGPASSWORD={{ sonarqube_password }}
-psql postgresql://{{ sonarqube_db_connection_string }}:3433/postgres -U {{ sonarqube_username }} -f /tmp/create_db.sql
+psql postgresql://{{ sonarqube_db_connection_string }}:1433/postgres -U {{ sonarqube_username }} -f /tmp/create_db.sql
 touch /root/.ansible_postgres_db_created
