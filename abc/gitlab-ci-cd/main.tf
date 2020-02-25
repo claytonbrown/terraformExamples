@@ -154,6 +154,11 @@ resource "alicloud_db_account" "sonarqube_postgres_db_account" {
   depends_on = ["alicloud_db_instance.sonarqube_postgres_db_instance"]
 }
 
+resource "alicloud_db_database" "sonarqube_postgres_db" {
+  instance_id = "${alicloud_db_instance.sonarqube_postgres_db_instance.id}"
+  name        = "sonarqube"
+}
+
 ###
 # ECS Config
 ###
