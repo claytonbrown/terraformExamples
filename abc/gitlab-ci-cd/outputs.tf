@@ -84,11 +84,6 @@ output "directmail_email" {
   value = "${var.directmail_email}"
 }
 
-output "directmail_password" {
-  description = "DirectMail SMTP password"
-  value = "${var.directmail_password}"
-}
-
 output "directmail_url" {
   description = "Mail URL for DirectMail"
   value = "${var.dm_spf_host_record}.${var.domain}"
