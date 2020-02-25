@@ -13,24 +13,6 @@
     - default-jdk
     - postgresql-client
 
-# Create PostgreSQL database
-
-- name: upload database creation command file to /tmp 
-  copy:
-    src: files/create_db.sql
-    dest: /tmp/create_db.sql
-
-- name: upload database creation script to /tmp
-  template:
-    src: templates/create_db.sh.j2
-    dest: /tmp/create_db.sh
-    mode: 700
-
-- name: run script to create postgresql database
-  command: /tmp/create_db.sh
-  args:
-    creates: /root/.ansible_postgres_db_created
-
 # Create SonarQube user and directory structure
 - name: add sonarqube user
   command: adduser --system --no-create-home --group --disabled-login sonarqube
