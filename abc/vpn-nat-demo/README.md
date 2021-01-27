@@ -1,8 +1,8 @@
 # VPN Gateway and NAT Gateway Setup: A Demo 
 
-- Terraform Version: v0.12.6
-- Alibaba Cloud Provider Version: v1.63
-- Status: Script working as of 2019-12-17 (YYYY-MM-DD)
+- Terraform Version: v0.14.5
+- Alibaba Cloud Provider Version: v1.113.0
+- Status: Script working as of 2021-01-26 (YYYY-MM-DD)
 
 See this script in action [on YouTube](https://www.youtube.com/watch?v=K_n-rLNxNks&feature=youtu.be)!
 
@@ -10,15 +10,15 @@ See this script in action [on YouTube](https://www.youtube.com/watch?v=K_n-rLNxN
 
 This script sets up a VPN Gateway and NAT Gateway attached to a VPC group, then creates a single ECS instances inside the VPC.
 
-The ECS instance only has a private IP address, so it has no access to the internet on its own. The machine can make outbound connections via NAT Gateway (say, for software updates) and you can make inbound connections via SSL over the VPN Gateway (once you have configured an SSL VPN client on your local machine).
+The ECS instance does not have a public IP address, so all Internet access is via the NAT Gateway (outbound) and VPN Gateway (inbound).
 
 ## Why
 
-Network setup on the cloud is something new users struggle with. This script is a reference new users can consult to learn the relationship between VPC groups, VPN and NAT Gateways, and associated bindings and configurations (SNAT rules, Elastic IPs, and so on).
+Network setup on the cloud is something new users struggle with. This script serves as a starting point for new users trying to understand how VPN Gateways and NAT Gateways can be attached to VPC groups and configured properly (SNAT rule configuration, Elastic IP binding, SSL VPN configuration, etc...).
 
 ## How 
 
-To run the terraform scripts located here, open a terminal and navigate to the directory holding this README, then type in:
+To run the terraform scripts located here, open a terminal and navigate to the directory holding this README, then type:
 
 ```
 ./setup.sh
@@ -38,7 +38,7 @@ When you are done playing and are ready to delete all the resource created by te
 
 ## Notes and Warnings
 
-If you choose to execute `terraform destroy` by hand instead of using using `./destroy.sh`, be aware that the SSH key .pem file will **not** be deleted by terraform. This can cause problems if you try to execute `./setup.sh` or `terraform apply` again in the future, as this old .pem file will prevent a new .pem keyfile from being written, which will **cause your login attempts to fail**.
+If you choose to execute `terraform destroy` by hand instead of using `./destroy.sh`, be aware that the ECS instance's SSH key (`.pem` file) will **not** be deleted by terraform. This can cause problems if you try to execute `./setup.sh` or `terraform apply` again in the future, as this old `.pem` file will prevent terraform from downloading the new key generated the next time the script is run, which will **cause your login attempts to fail**.
 
 ## Architecture
 

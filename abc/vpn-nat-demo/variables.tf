@@ -9,7 +9,7 @@ variable "access_key_secret" {
 
 variable "abc_image_id" {
     description = "Disk image ID for ECS boot disk: Ubuntu 18.x"
-    default = "ubuntu_18_04_64_20G_alibase_20190624.vhd"
+    default = "ubuntu_20_04_x64_20G_alibase_20201228.vhd"
 }
 
 variable "region" {
