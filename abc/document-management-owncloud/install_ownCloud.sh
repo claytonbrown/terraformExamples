@@ -1,20 +1,33 @@
 #!/bin/bash
-apt-get update
-apt-get -y install apache2
-apt-get -y install php 
-apt-get -y install libapache2-mod-php 
-apt-get -y install php-mysql
-curl https://download.owncloud.org/download/repositories/production/Ubuntu_18.04/Release.key | apt-key add -
-echo 'deb http://download.owncloud.org/download/repositories/production/Ubuntu_18.04/ /' > /etc/apt/sources.list.d/owncloud.list
-apt-get update
-apt-get -y install php-bz2
-apt-get -y install php-curl 
-apt-get -y install php-gd 
-apt-get -y install php-imagick 
-apt-get -y install php-intl 
-apt-get -y install php-mbstring 
-apt-get -y install php-xml 
-apt-get -y install php-zip 
-apt-get -y install owncloud-files
+apt update
+
+apt install -y \
+  apache2 \
+  php \
+  libapache2-mod-php \
+  php-mysql 
+
+echo 'deb http://download.opensuse.org/repositories/isv:/ownCloud:/server:/10/Ubuntu_20.04/ /' | sudo tee /etc/apt/sources.list.d/isv:ownCloud:server:10.list
+curl -fsSL https://download.opensuse.org/repositories/isv:ownCloud:server:10/Ubuntu_20.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/isv_ownCloud_server_10.gpg > /dev/null
+
+apt update
+
+apt install -y \
+  apache2 \
+  libapache2-mod-php \
+  mariadb-server \
+  openssl \
+  php-imagick php-common php-curl \
+  php-gd php-imap php-intl \
+  php-json php-mbstring php-mysql \
+  php-ssh2 php-xml php-zip \
+  php-apcu php-redis redis-server \
+  wget
+
+apt install -y owncloud-complete-files
+
 sed -i 's/\/var\/www\/html/\/var\/www\/owncloud/g' /etc/apache2/sites-enabled/000-default.conf
 systemctl restart apache2
+
+cd /var/www/
+chown -R www-data. owncloud

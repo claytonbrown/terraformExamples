@@ -1,14 +1,12 @@
 # ownCloud on Alibaba Cloud
 
-- Terraform Version: v0.12.12
-- Alibaba Cloud Provider Version: v1.58.0
-- Status: Script working as of 2019-10-22 (YYYY-MM-DD)
-
-See this script in action [on YouTube](https://www.youtube.com/watch?v=wKj864GXNjY&feature=youtu.be)!
+- Terraform Version: v1.0.5
+- Alibaba Cloud Provider Version: v1.133.0
+- Status: Script working as of 2021-09-02 (YYYY-MM-DD)
 
 ## What
 
-This terraform script sets up ownCloud (the open source file sharing and document management solution) on an ECS instance running Ubuntu 18.04. A separate RDS database is also configured, rather than locally installing MySQL. An EIP is assigned to the ECS instance so that the instance can be replaced in the future without the need to change the public IP address associated with ownCloud.
+This terraform script sets up ownCloud (the open source file sharing and document management solution) on an ECS instance running Ubuntu 20.04. A separate RDS database is also configured, rather than locally installing MySQL. An EIP is assigned to the ECS instance so that the instance can be replaced in the future without the need to change the public IP address associated with ownCloud.
 
 Once the script has run, it outputs login information for the ECS instance, as well as all the database configuration information needed by the ownCloud setup page. All you need to do after running "terraform apply" is visit the public IP address of the ECS instance (the EIP IP address) in a web browser, and enter the database connection information output by the terraform script (database name, database username, database password, and connection string). It's that easy!
 
@@ -61,7 +59,7 @@ That's it! In a few minutes you'll have a working ownCloud document sharing syst
 
 ### Security
 
-Before using ownCloud in production, **you should absolutely, *DEFINITELY* enable SSL**. You can get an SSL certificate *entirely for free* from the Let's Encrypt project. A full guide to [setting this up on Ubuntu 18.04](https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04) is available on the DigitalOcean website.
+Before using ownCloud in production, **you should absolutely, *DEFINITELY* enable SSL**. You can get an SSL certificate *entirely for free* from the Let's Encrypt project. A full guide to [setting this up on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-20-04) is available on the DigitalOcean website.
 
 ### Login
 
