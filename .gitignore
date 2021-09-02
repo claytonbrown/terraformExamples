@@ -8,4 +8,5 @@
 **/ansible/hosts
 *ssh-key*
 *.ak
+*.hcl
 
