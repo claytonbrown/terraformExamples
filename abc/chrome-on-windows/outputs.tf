@@ -10,10 +10,10 @@ output "username" {
 
 output "password" {
   description = "Password for RDP login"
-  value       = "${var.password}"
+  value       = var.password
 }
 
 output "ip" {
   description = "Public IP address of our new Windows 2016 instance"
-  value       = "${alicloud_instance.tf_example.public_ip}"
+  value       = alicloud_instance.tf_example.public_ip
 }
