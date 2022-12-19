@@ -3,13 +3,20 @@
 #
 # Author: Jeremy Pedersen
 # Creation Date: 2020-01-06
-# Last Updated: 2020-01-07
+# Last Updated: 2022-12-19
 #
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+    }
+  }
+}
+
 provider "aws" {
   access_key = "${var.access_key}"
   secret_key = "${var.access_key_secret}"
   region     = "${var.region}"
-  version    = "~> 2.50"
 }
 
 ###
@@ -27,7 +34,7 @@ data "aws_ami" "windows-server" {
 
   filter {
     name   = "name"
-    values = ["*Windows_Server-2019-English-Full-Base-*"]
+    values = ["*Windows_Server-2022-English-Full-Base-*"]
   }
 
   filter {
@@ -50,6 +57,7 @@ resource "aws_vpc" "ec2-chrome-on-win-vpc" {
 
   tags = {
     Name = "ec2-chrome-on-win-vpc"
+    Creator = "terraform"
   }
 }
 
@@ -63,6 +71,7 @@ resource "aws_subnet" "ec2-chrome-on-win-subnet" {
 
   tags = {
     Name = "ec2-chrome-on-win-subnet"
+    Creator = "terraform"
   }
 }
 
@@ -76,6 +85,7 @@ resource "aws_internet_gateway" "ec2-chrome-on-win-internet-gw" {
 
   tags = {
     Name = "ec2-chrome-on-win-internet-gw"
+    Creator = "terraform"
   }
 }
 
@@ -90,6 +100,7 @@ resource "aws_route_table" "ec2-chrome-on-win-route-table" {
 
   tags = {
     Name = "ec2-chrome-on-win-route-table"
+    Creator = "terraform"
   }
 }
 
@@ -108,6 +119,11 @@ resource "aws_security_group" "ec2-chrome-on-win-sg" {
   name        = "ec2-example-sg"
   description = "Allow inbound ping, RDP, and HTTP/S traffic"
   vpc_id      = "${aws_vpc.ec2-chrome-on-win-vpc.id}"
+
+  tags = {
+    Name = "ec2-example-sg"
+    Creator = "terraform"
+  }
 }
 
 resource "aws_security_group_rule" "allow-rdp-in" {
@@ -139,6 +155,12 @@ resource "aws_security_group_rule" "allow-everything-out" {
 resource "aws_key_pair" "ec2-chrome-on-win-ssh-key" {
   key_name   = "ec2-win-key"
   public_key = "${file(var.ssh_public_key_file)}"
+
+  tags = {
+    Name = "ec2-win-key"
+    Creator = "terraform"
+  }
+
 }
 
 ###
@@ -147,7 +169,7 @@ resource "aws_key_pair" "ec2-chrome-on-win-ssh-key" {
 resource "aws_instance" "ec2-chrome-on-win-instance" {
 
   ami           = "${data.aws_ami.windows-server.id}"
-  instance_type = "t2.micro"
+  instance_type = "t3.micro"
 
   get_password_data = true
 
@@ -161,5 +183,6 @@ resource "aws_instance" "ec2-chrome-on-win-instance" {
 
   tags = {
     Name = "ec2-chrome-on-win-instance"
+    Creator = "terraform"
   }
 }

@@ -1,20 +1,18 @@
 # Chrome On Windows (on AWS!)
 
-- Terraform Version: v0.12.13
-- AWS Provider Version: v2.43
-- Status: Script working as of 2020-01-07 (YYYY-MM-DD)
-
-Curious how this script works? See a demo on YouTube [here](https://www.youtube.com/watch?v=mhqy-FDhDoc).
+- Terraform Version: v1.3.6
+- AWS Provider Version: v4.47.0
+- Status: Script working as of 2022-12-19 (YYYY-MM-DD)
 
 ## What
 
-This terraform script sets up a Windows Server 2019 instance and automatically installs the Chrome browser using a PowerShell script borrowed from [here](https://medium.com/@uqualio/how-to-install-chrome-on-windows-with-powershell-290e7346271). 
+This terraform script sets up a Windows Server 2022 instance and automatically installs the Chrome browser using a PowerShell script borrowed from [here](https://medium.com/@uqualio/how-to-install-chrome-on-windows-with-powershell-290e7346271). 
 
 Once the script has run, it outputs login information, so that you can log into the newly created ECS instance using an RDP client.
 
 ## Why
 
-Sometimes, you just need a remote desktop session somewhere else. Maybe for testing connectivity or load times for a website or application. Why install Chrome? Because Internet Explorer on Windows Server 2019 is a pain to use!
+Sometimes, you just need a remote desktop session somewhere else. Maybe for testing connectivity or load times for a website or application. Why install Chrome? Because sometimes you just don't want to use Edge. 
 
 ## How
 
@@ -52,6 +50,6 @@ This will automatically destroy the instance and associated resources. That's it
 
 The architecture for this system is as follows:
 
-![Windows Server 2019 on AWS](diagrams/chrome_on_windows.png)
+![Windows Server 2022 on AWS](diagrams/chrome_on_windows.png)
 
 The architecture is very simple, just a single instance in a single VPC. 
